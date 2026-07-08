@@ -1,0 +1,20 @@
+{
+  "collections": {
+    "consultations": {
+      "fields": {
+        "name": { "type": "string" },
+        "company": { "type": "string" },
+        "email": { "type": "string" },
+        "projectType": { "type": "string" },
+        "message": { "type": "string" },
+        "createdAt": { "type": "timestamp" }
+      }
+    },
+    "chat_sessions": {
+      "fields": {
+        "messages": { "type": "array" },
+        "updatedAt": { "type": "timestamp" }
+      }
+    }
+  }
+}

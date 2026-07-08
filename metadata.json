@@ -1,0 +1,8 @@
+{
+  "name": "XETA FORGE",
+  "description": "Next-gen web engineering and intelligent AI automation agency.",
+  "requestFramePermissions": [],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}

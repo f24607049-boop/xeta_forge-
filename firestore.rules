@@ -1,0 +1,25 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    
+    // Security check for consultations collection
+    match /consultations/{consultationId} {
+      // Allow any visitor to submit a brief
+      allow create: if request.resource.data.name is string 
+                    && request.resource.data.name.size() > 0
+                    && request.resource.data.email is string 
+                    && request.resource.data.email.matches("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$")
+                    && request.resource.data.projectType is string
+                    && request.resource.data.message is string;
+      
+      // Prevent any public reading, listing, editing, or deleting of other users' briefs
+      allow read, update, delete: if false;
+    }
+
+    // Security check for chat session memories
+    match /chat_sessions/{sessionId} {
+      allow read, create, update: if true;
+      allow delete: if false;
+    }
+  }
+}
