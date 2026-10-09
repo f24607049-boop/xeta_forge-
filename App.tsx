@@ -61,6 +61,34 @@ const SERVICES: Service[] = [
       'Omnichannel support across Web, Slack, and WhatsApp platforms.',
       'Seamless fallback routing models notifying on-duty human agents.'
     ]
+  },
+  {
+    id: '4',
+    title: 'Custom App Development',
+    tagline: 'Mobile & Cross-Platform',
+    statusTag: 'High-Performance',
+    image: 'https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?q=80&w=1000&auto=format&fit=crop',
+    description: 'We engineer high-performance native and cross-platform mobile applications with fluid interfaces, offline resilience, and deeply integrated AI capabilities for iOS and Android.',
+    features: [
+      'Cross-platform React Native and Flutter mobile architectures.',
+      'Native iOS & Android performance with 60fps fluid interactions.',
+      'Offline-first data synchronization, biometric auth, and push notifications.',
+      'End-to-end App Store and Google Play deployment pipelines.'
+    ]
+  },
+  {
+    id: '5',
+    title: 'Custom AI Model Training',
+    tagline: 'Fine-Tuning & Neural Ops',
+    statusTag: 'Precision AI',
+    image: 'https://images.unsplash.com/photo-1620712943543-bcc4688e7485?q=80&w=1000&auto=format&fit=crop',
+    description: 'Train, fine-tune, and align domain-specific foundation models and custom neural architectures on your proprietary datasets for unmatched accuracy, speed, and data sovereignty.',
+    features: [
+      'Domain-specific LLM fine-tuning (LoRA, QLoRA, and full-weight tuning).',
+      'Proprietary dataset curation, cleaning, and RLHF alignment.',
+      'Custom computer vision, classification, and predictive ML model training.',
+      'Model quantization and low-latency private cloud or on-prem deployment.'
+    ]
   }
 ];
 
@@ -76,7 +104,7 @@ const App: React.FC = () => {
     name: '',
     company: '',
     email: '',
-    projectType: 'Web Development',
+    projectType: 'Next-Gen Web Development',
     message: ''
   });
   const [bookingStep, setBookingStep] = useState<string | null>(null);
@@ -210,12 +238,13 @@ const App: React.FC = () => {
       <AIChat />
 
       {/* Navigation */}
-      <nav className="fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-6 md:px-12 py-4 bg-[#090d16]/85 backdrop-blur-lg border-b border-white/5 transition-all duration-300 shadow-xl shadow-cyan-950/5">
+      <nav className="fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-6 md:px-12 py-3 md:py-4 bg-[#090d16]/90 backdrop-blur-lg border-b border-white/5 transition-all duration-300 shadow-xl shadow-cyan-950/10">
         <div 
           onClick={() => scrollToSection('hero')}
-          className="font-heading text-lg md:text-xl font-bold tracking-widest text-white cursor-pointer z-50 flex items-center gap-2 select-none"
+          className="font-heading text-lg md:text-xl font-bold tracking-wider text-white cursor-pointer z-50 flex items-center gap-2"
+          data-hover="true"
         >
-          <span className="text-cyan-400 font-black">XETA</span> FORGE
+          XETA <span className="text-cyan-400">FORGE</span>
         </div>
         
         {/* Desktop Menu */}
@@ -240,7 +269,7 @@ const App: React.FC = () => {
         
         <button 
           onClick={() => scrollToSection('contact')}
-          className="hidden md:inline-block border border-cyan-500/50 hover:border-cyan-400 px-6 py-2.5 text-xs font-bold tracking-widest uppercase hover:bg-cyan-500 hover:text-slate-950 shadow-[0_0_15px_rgba(6,182,212,0.1)] transition-all duration-300 text-white cursor-pointer bg-transparent"
+          className="hidden md:inline-block border border-cyan-500/50 hover:border-cyan-400 px-6 py-2.5 text-xs font-bold tracking-widest uppercase hover:bg-cyan-500 hover:text-slate-950 shadow-[0_0_15px_rgba(6,182,212,0.15)] transition-all duration-300 text-white cursor-pointer bg-transparent rounded-lg"
           data-hover="true"
         >
           Book a Consultation
@@ -262,7 +291,7 @@ const App: React.FC = () => {
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -20 }}
-            className="fixed inset-0 z-30 bg-slate-950/98 backdrop-blur-xl flex flex-col items-center justify-center gap-8 md:hidden"
+            className="fixed inset-0 z-30 bg-slate-950/98 backdrop-blur-xl flex flex-col items-center justify-center gap-8 md:hidden px-6"
           >
             {[
               { label: 'Services', id: 'services' },
@@ -272,15 +301,21 @@ const App: React.FC = () => {
             ].map((item) => (
               <button
                 key={item.id}
-                onClick={() => scrollToSection(item.id)}
+                onClick={() => {
+                  setMobileMenuOpen(false);
+                  scrollToSection(item.id);
+                }}
                 className="text-2xl font-heading font-semibold text-slate-200 hover:text-cyan-400 transition-colors uppercase bg-transparent border-none tracking-widest"
               >
                 {item.label}
               </button>
             ))}
             <button 
-              onClick={() => scrollToSection('contact')}
-              className="mt-8 border border-cyan-400 px-8 py-3 text-xs font-bold tracking-widest uppercase bg-cyan-500 text-slate-950"
+              onClick={() => {
+                setMobileMenuOpen(false);
+                scrollToSection('contact');
+              }}
+              className="mt-6 border border-cyan-400 px-8 py-3 text-xs font-bold tracking-widest uppercase bg-cyan-500 text-slate-950 rounded-lg shadow-[0_0_20px_rgba(6,182,212,0.3)]"
             >
               Book Consultation
             </button>
@@ -379,6 +414,8 @@ const App: React.FC = () => {
               {[...Array(3)].map((_, i) => (
                 <span key={i} className="text-xs md:text-sm font-mono tracking-[0.3em] font-medium uppercase px-12 flex items-center gap-6 text-slate-400">
                   WEB ENGINEERING <span className="text-cyan-400">●</span> 
+                  APP DEVELOPMENT <span className="text-cyan-400">●</span> 
+                  MODEL TRAINING <span className="text-cyan-400">●</span> 
                   AI WORKFLOWS <span className="text-cyan-400">●</span> 
                   CONVERSATIONAL AGENTS <span className="text-cyan-400">●</span> 
                   SECURE METADATA <span className="text-cyan-400">●</span> 
@@ -406,9 +443,14 @@ const App: React.FC = () => {
              </p>
           </div>
 
-          <div className="grid grid-cols-1 lg:grid-cols-3 border-t border-l border-white/10 bg-slate-950/40 backdrop-blur-md">
-            {SERVICES.map((service) => (
-              <ServiceCard key={service.id} service={service} onClick={() => setSelectedService(service)} />
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 border-t border-l border-white/10 bg-slate-950/40 backdrop-blur-md">
+            {SERVICES.map((service, index) => (
+              <ServiceCard 
+                key={service.id} 
+                service={service} 
+                onClick={() => setSelectedService(service)} 
+                className={index < 3 ? 'lg:col-span-2' : index === 4 ? 'md:col-span-2 lg:col-span-3' : 'lg:col-span-3'}
+              />
             ))}
           </div>
         </div>
@@ -523,37 +565,82 @@ const App: React.FC = () => {
              </p>
           </div>
           
-          {/* 3 engagement cards */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-20">
+          {/* 5 engagement cards */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-6 mb-20">
             {[
               { 
                 name: 'Technical Discovery', 
                 price: 'Roadmap', 
                 subtitle: 'Architecture & Scoping', 
                 color: 'white', 
-                accent: 'bg-white/5 border-white/10' 
+                accent: 'bg-white/5 border-white/10',
+                targetType: 'General Consultation',
+                features: [
+                  { icon: Terminal, text: 'Full Workflow Assessment', iconColor: 'text-slate-500', textColor: 'text-slate-300' },
+                  { icon: Layers, text: 'System Architecture Layout', iconColor: 'text-slate-500', textColor: 'text-slate-300' },
+                  { icon: Code, text: 'Custom Scope Proposal', iconColor: 'text-slate-500', textColor: 'text-slate-300' },
+                ]
               },
               { 
                 name: 'Dedicated Product Forge', 
                 price: 'Custom Project', 
-                subtitle: 'End-to-end Full Engineering', 
+                subtitle: 'End-to-end Web Engineering', 
                 color: 'cyan', 
-                accent: 'bg-cyan-950/10 border-cyan-500/40 shadow-[0_0_20px_rgba(6,182,212,0.05)]' 
+                accent: 'bg-cyan-950/10 border-cyan-500/40 shadow-[0_0_20px_rgba(6,182,212,0.05)]',
+                targetType: 'Next-Gen Web Development',
+                features: [
+                  { icon: Code, text: 'Full-Stack Web Development', iconColor: 'text-cyan-400', textColor: 'text-white' },
+                  { icon: Cpu, text: 'Cloud-Native API Architecture', iconColor: 'text-cyan-400', textColor: 'text-white' },
+                  { icon: Shield, text: 'Post-launch Support Retainer', iconColor: 'text-cyan-400', textColor: 'text-white' },
+                ]
               },
               { 
                 name: 'Turnkey AI Suite', 
                 price: 'Agent Setup', 
                 subtitle: 'Workflow & Bot Integrations', 
                 color: 'indigo', 
-                accent: 'bg-indigo-950/10 border-indigo-500/30' 
+                accent: 'bg-indigo-950/10 border-indigo-500/30',
+                targetType: 'Intelligent AI Automation',
+                features: [
+                  { icon: Bot, text: 'Custom Trained 24/7 Chatbot', iconColor: 'text-indigo-400', textColor: 'text-slate-300' },
+                  { icon: Activity, text: 'Automatic Business Workflow', iconColor: 'text-indigo-400', textColor: 'text-slate-300' },
+                  { icon: Layers, text: 'Legacy CRM API Pipelines', iconColor: 'text-indigo-400', textColor: 'text-slate-300' },
+                ]
+              },
+              { 
+                name: 'Mobile App Forge', 
+                price: 'iOS & Android', 
+                subtitle: 'Native & Cross-Platform Apps', 
+                color: 'cyan', 
+                accent: 'bg-cyan-950/10 border-cyan-500/35 shadow-[0_0_20px_rgba(6,182,212,0.05)]',
+                targetType: 'Custom App Development',
+                features: [
+                  { icon: Code, text: 'React Native & Flutter Builds', iconColor: 'text-cyan-400', textColor: 'text-white' },
+                  { icon: Activity, text: '60fps Fluid UI & Offline Sync', iconColor: 'text-cyan-400', textColor: 'text-white' },
+                  { icon: Shield, text: 'App Store & Play Store Launch', iconColor: 'text-cyan-400', textColor: 'text-white' },
+                ]
+              },
+              { 
+                name: 'Neural Model Training', 
+                price: 'Custom LLM / ML', 
+                subtitle: 'Fine-Tuning & Proprietary AI', 
+                color: 'indigo', 
+                accent: 'bg-indigo-950/15 border-indigo-500/40 shadow-[0_0_20px_rgba(99,102,241,0.05)]',
+                targetType: 'Custom AI Model Training',
+                features: [
+                  { icon: Cpu, text: 'Domain-Specific LLM Fine-Tuning', iconColor: 'text-indigo-400', textColor: 'text-white' },
+                  { icon: Layers, text: 'Dataset Curation & RLHF Alignment', iconColor: 'text-indigo-400', textColor: 'text-white' },
+                  { icon: Shield, text: 'Private Cloud & On-Prem Inference', iconColor: 'text-indigo-400', textColor: 'text-white' },
+                ]
               },
             ].map((plan, i) => {
-              const isSelected = formData.projectType === (plan.name === 'Technical Discovery' ? 'General Consultation' : plan.name === 'Dedicated Product Forge' ? 'Web Development' : 'AI Automation / Chatbot');
+              const isSelected = formData.projectType === plan.targetType;
+              const colSpanClass = i < 3 ? 'lg:col-span-2' : i === 4 ? 'md:col-span-2 lg:col-span-3' : 'lg:col-span-3';
               return (
                 <motion.div
                   key={i}
                   whileHover={{ y: -12 }}
-                  className={`relative p-6 sm:p-8 md:p-10 border backdrop-blur-md flex flex-col min-h-[420px] md:min-h-[480px] transition-all duration-300 rounded-3xl ${plan.accent}`}
+                  className={`relative p-6 sm:p-8 md:p-10 border backdrop-blur-md flex flex-col min-h-[420px] md:min-h-[480px] transition-all duration-300 rounded-3xl ${plan.accent} ${colSpanClass} ${isSelected ? 'ring-1 ring-cyan-400/60' : ''}`}
                   data-hover="true"
                 >
                   <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-cyan-500/20 to-transparent rounded-t-3xl" />
@@ -567,34 +654,20 @@ const App: React.FC = () => {
                     </div>
                     
                     <ul className="space-y-4 text-xs md:text-sm text-slate-300">
-                      {i === 0 && (
-                        <>
-                          <li className="flex items-center gap-3"><Terminal className="w-4 h-4 text-slate-500" /> Full Workflow Assessment</li>
-                          <li className="flex items-center gap-3"><Layers className="w-4 h-4 text-slate-500" /> System Architecture Layout</li>
-                          <li className="flex items-center gap-3"><Code className="w-4 h-4 text-slate-500" /> Custom Scope Proposal</li>
-                        </>
-                      )}
-                      {i === 1 && (
-                        <>
-                          <li className="flex items-center gap-3 text-white"><Code className="w-4 h-4 text-cyan-400" /> Full-Stack Web Development</li>
-                          <li className="flex items-center gap-3 text-white"><Cpu className="w-4 h-4 text-cyan-400" /> Custom Cognitive Alignment</li>
-                          <li className="flex items-center gap-3 text-white"><Shield className="w-4 h-4 text-cyan-400" /> Post-launch Support Retainer</li>
-                        </>
-                      )}
-                      {i === 2 && (
-                        <>
-                          <li className="flex items-center gap-3"><Bot className="w-4 h-4 text-indigo-400" /> Custom Trained 24/7 Chatbot</li>
-                          <li className="flex items-center gap-3"><Activity className="w-4 h-4 text-indigo-400" /> Automatic Business Workflow</li>
-                          <li className="flex items-center gap-3"><Layers className="w-4 h-4 text-indigo-400" /> Legacy CRM API Pipelines</li>
-                        </>
-                      )}
+                      {plan.features.map((feat, fIdx) => {
+                        const FeatIcon = feat.icon;
+                        return (
+                          <li key={fIdx} className={`flex items-center gap-3 ${feat.textColor}`}>
+                            <FeatIcon className={`w-4 h-4 shrink-0 ${feat.iconColor}`} /> {feat.text}
+                          </li>
+                        );
+                      })}
                     </ul>
                   </div>
                   
                   <button 
                     onClick={() => {
-                      const targetType = plan.name === 'Technical Discovery' ? 'General Consultation' : plan.name === 'Dedicated Product Forge' ? 'Web Development' : 'AI Automation / Chatbot';
-                      setFormData(prev => ({ ...prev, projectType: targetType }));
+                      setFormData(prev => ({ ...prev, projectType: plan.targetType }));
                       const formElement = document.getElementById('b2b-form');
                       if (formElement) {
                         formElement.scrollIntoView({ behavior: 'smooth' });
@@ -626,7 +699,7 @@ const App: React.FC = () => {
                 data-hover="true"
               >
                 <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-                <span>Skip the Form? Chat on WhatsApp: 0371-1889382</span>
+                <span>Skip the Form? Chat on WhatsApp: +923711889382</span>
               </a>
             </div>
 
@@ -666,7 +739,7 @@ const App: React.FC = () => {
                     <button 
                       onClick={() => {
                         setBookingSuccess(false);
-                        setFormData({ name: '', email: '', company: '', projectType: 'Web Development', message: '' });
+                        setFormData({ name: '', email: '', company: '', projectType: 'Next-Gen Web Development', message: '' });
                       }}
                       className="border border-white/20 text-slate-300 hover:border-cyan-500/40 hover:text-cyan-400 transition-all px-6 py-3.5 text-xs tracking-widest uppercase font-bold rounded-xl cursor-pointer"
                     >
@@ -754,9 +827,11 @@ const App: React.FC = () => {
                         onChange={handleInputChange}
                         className="w-full bg-slate-900 border border-white/10 rounded-xl py-3 px-4 text-sm text-slate-100 focus:outline-none focus:border-cyan-500/50 transition-colors cursor-pointer"
                       >
-                        <option value="Web Development">Next-Gen Web Development</option>
-                        <option value="AI Automation">Intelligent AI Automation</option>
-                        <option value="Chatbot">Conversational AI & Chatbots</option>
+                        <option value="Next-Gen Web Development">Next-Gen Web Development</option>
+                        <option value="Custom App Development">Custom App Development</option>
+                        <option value="Custom AI Model Training">Custom AI Model Training</option>
+                        <option value="Intelligent AI Automation">Intelligent AI Automation</option>
+                        <option value="Conversational AI & Chatbots">Conversational AI & Chatbots</option>
                         <option value="General Consultation">General Engineering Consultation</option>
                       </select>
                     </div>
@@ -793,12 +868,19 @@ const App: React.FC = () => {
       <footer className="relative z-10 border-t border-white/5 py-12 md:py-16 bg-slate-950">
         <div className="max-w-7xl mx-auto px-6 flex flex-col md:flex-row justify-between items-start md:items-end gap-8">
           <div>
-             <div className="font-heading text-xl md:text-2xl font-bold tracking-widest mb-4 text-white uppercase select-none">
-               <span className="text-cyan-400">XETA</span> FORGE
-             </div>
-             <div className="flex gap-2 text-xs font-mono text-slate-500">
-               <span>&copy; {new Date().getFullYear()} Xeta Forge. All systems functional.</span>
-             </div>
+            <h3 
+              onClick={() => scrollToSection('hero')} 
+              className="text-xl md:text-2xl font-heading font-bold uppercase tracking-wider text-white mb-2 cursor-pointer inline-block"
+              data-hover="true"
+            >
+              XETA <span className="text-cyan-400">FORGE</span>
+            </h3>
+            <p className="text-xs text-slate-400 max-w-sm mb-4 font-light">
+              Forging scalable web architectures, intelligent workflows, and custom context-aware conversational systems.
+            </p>
+            <div className="flex gap-2 text-xs font-mono text-slate-500">
+              <span>&copy; {new Date().getFullYear()} Xeta Forge. All systems functional.</span>
+            </div>
           </div>
           
           <div className="flex gap-6 md:gap-8 flex-wrap items-center">
@@ -810,10 +892,7 @@ const App: React.FC = () => {
               data-hover="true"
             >
               <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
-              WhatsApp: 0371-1889382
-            </a>
-            <a href="https://x.com/GoogleAIStudio" target="_blank" rel="noopener noreferrer" className="text-slate-400 hover:text-white font-bold uppercase text-xxs tracking-[0.25em] transition-colors cursor-pointer" data-hover="true">
-              Twitter
+              WhatsApp: +923711889382
             </a>
             <a href="mailto:architects@xetaforge.com" className="text-slate-400 hover:text-white font-bold uppercase text-xxs tracking-[0.25em] transition-colors cursor-pointer" data-hover="true">
               Contact Email

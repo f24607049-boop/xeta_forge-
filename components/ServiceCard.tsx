@@ -11,12 +11,13 @@ import { ArrowUpRight } from 'lucide-react';
 interface ServiceCardProps {
   service: Service;
   onClick: () => void;
+  className?: string;
 }
 
-const ServiceCard: React.FC<ServiceCardProps> = ({ service, onClick }) => {
+const ServiceCard: React.FC<ServiceCardProps> = ({ service, onClick, className = '' }) => {
   return (
     <motion.div
-      className="group relative h-[400px] md:h-[500px] w-full overflow-hidden border-b lg:border-r border-white/10 bg-slate-950 cursor-pointer"
+      className={`group relative h-[400px] md:h-[500px] w-full overflow-hidden border-b lg:border-r border-white/10 bg-slate-950 cursor-pointer ${className}`}
       initial="rest"
       whileHover="hover"
       whileTap="hover"

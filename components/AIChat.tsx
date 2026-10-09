@@ -79,10 +79,18 @@ const AIChat: React.FC = () => {
             className="mb-4 w-[90vw] md:w-96 bg-slate-950/95 backdrop-blur-xl border border-white/10 rounded-2xl overflow-hidden shadow-2xl shadow-cyan-500/10"
           >
             {/* Header */}
-            <div className="bg-gradient-to-r from-cyan-950/80 to-slate-900/80 p-4 flex justify-between items-center border-b border-white/10">
-              <div className="flex items-center gap-2">
-                <Sparkles className="w-5 h-5 text-cyan-400 animate-pulse" />
-                <h3 className="font-heading font-bold text-white tracking-wider text-sm">XETA AI</h3>
+            <div className="bg-gradient-to-r from-cyan-950/80 to-slate-900/80 p-3.5 px-4 flex justify-between items-center border-b border-white/10">
+              <div className="flex items-center gap-2.5">
+                <div className="p-1.5 bg-cyan-500/20 rounded-lg text-cyan-400 border border-cyan-500/30">
+                  <Sparkles className="w-4 h-4" />
+                </div>
+                <div>
+                  <h3 className="font-heading font-bold text-white tracking-wider text-xs flex items-center gap-1.5">
+                    <span>XETA</span>
+                    <span className="text-cyan-400">AI</span>
+                  </h3>
+                  <span className="text-[9px] font-mono text-cyan-400/80 tracking-widest block">ONLINE • ASSISTANT</span>
+                </div>
               </div>
               <button onClick={() => setIsOpen(false)} className="text-white/50 hover:text-white" data-hover="true">
                 <X className="w-5 h-5" />
