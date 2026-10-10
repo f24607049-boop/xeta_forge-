@@ -443,7 +443,7 @@ const App: React.FC = () => {
              </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 border-t border-l border-white/10 bg-slate-950/40 backdrop-blur-md">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-6 md:gap-8">
             {SERVICES.map((service, index) => (
               <ServiceCard 
                 key={service.id} 
