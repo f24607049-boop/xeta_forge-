@@ -62,7 +62,7 @@ function getLocalConciergeResponse(message: string): string {
 
 async function startServer() {
   const app = express();
-  const PORT = 3000;
+  const PORT = Number(process.env.PORT) || 3000;
 
   // Limit incoming JSON payload to prevent denial of service (DoS) attacks
   app.use(express.json({ limit: "10kb" }));
