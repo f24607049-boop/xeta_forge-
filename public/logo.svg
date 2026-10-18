@@ -1,0 +1,137 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 500" fill="none">
+  <defs>
+    <filter id="ambientGlow" x="-25%" y="-25%" width="150%" height="150%">
+      <feGaussianBlur stdDeviation="8" result="blur" />
+      <feComposite in="SourceGraphic" in2="blur" operator="over" />
+    </filter>
+
+    <!-- Luminous Cyan Environment Gradient -->
+    <linearGradient id="cyanLuminous" x1="80" y1="80" x2="380" y2="420" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stopColor="#ecfeff" />
+      <stop offset="25%" stopColor="#67e8f9" />
+      <stop offset="60%" stopColor="#06b6d4" />
+      <stop offset="100%" stopColor="#2563eb" />
+    </linearGradient>
+
+    <!-- Deep Cyan-Indigo Bevel Gradient -->
+    <linearGradient id="cyanBevel" x1="110" y1="140" x2="265" y2="365" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stopColor="#22d3ee" />
+      <stop offset="50%" stopColor="#0284c7" />
+      <stop offset="100%" stopColor="#1e40af" />
+    </linearGradient>
+
+    <!-- Liquid Platinum & White Glass Gradient -->
+    <linearGradient id="platinumBright" x1="230" y1="140" x2="420" y2="320" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stopColor="#ffffff" />
+      <stop offset="45%" stopColor="#f1f5f9" />
+      <stop offset="80%" stopColor="#cbd5e1" />
+      <stop offset="100%" stopColor="#67e8f9" />
+    </linearGradient>
+
+    <!-- Subtle Cool Metallic Bevel -->
+    <linearGradient id="platinumBevel" x1="250" y1="190" x2="400" y2="370" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stopColor="#cbd5e1" />
+      <stop offset="55%" stopColor="#94a3b8" />
+      <stop offset="100%" stopColor="#475569" />
+    </linearGradient>
+
+    <!-- Orbital Swoosh Gradient -->
+    <linearGradient id="swooshGrad" x1="100" y1="410" x2="380" y2="100" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stopColor="#2563eb" />
+      <stop offset="35%" stopColor="#06b6d4" />
+      <stop offset="70%" stopColor="#67e8f9" />
+      <stop offset="100%" stopColor="#ffffff" />
+    </linearGradient>
+  </defs>
+
+  <!-- Subtle Translucent Glass Disc Base -->
+  <circle cx="250" cy="250" r="196" fill="#090d16" fill-opacity="0.55" />
+  <circle cx="250" cy="250" r="184" stroke="#67e8f9" stroke-opacity="0.16" stroke-width="1.5" />
+
+  <!-- Outer Orbital Ring - Left & Bottom Cyan Arc -->
+  <path
+    d="M 242 46 A 204 204 0 1 0 368 416 L 355 400 A 184 184 0 1 1 242 66 Z"
+    fill="url(#cyanLuminous)"
+    filter="url(#ambientGlow)"
+  />
+
+  <!-- Outer Orbital Ring - Top Right Platinum Arc -->
+  <path
+    d="M 258 46 A 204 204 0 0 1 446 306 L 427 300 A 184 184 0 0 0 258 66 Z"
+    fill="url(#platinumBright)"
+  />
+
+  <!-- Dynamic Orbital Swoosh Arc (Upper & Lower Tapered Stream) -->
+  <path
+    d="M 230 178 C 272 124, 332 94, 364 110 C 380 119, 376 144, 358 164 L 336 164 C 349 148, 353 132, 342 126 C 320 115, 272 140, 230 178 Z"
+    fill="url(#swooshGrad)"
+  />
+  <path
+    d="M 118 370 C 96 400, 104 426, 136 426 C 174 426, 228 396, 272 348 C 232 382, 180 404, 148 402 C 127 400, 125 385, 139 370 Z"
+    fill="url(#swooshGrad)"
+  />
+
+  <!-- Left Cyan 'X' Chevron (Precision 45-deg Geometry) -->
+  <polygon
+    points="116,148 180,148 274,250 180,352 116,352 210,250"
+    fill="url(#cyanBevel)"
+  />
+  <polygon
+    points="116,148 180,148 274,250 246,250 166,164 132,164"
+    fill="url(#cyanLuminous)"
+  />
+  <polyline
+    points="118,148 179,148 272,250 179,351"
+    stroke="#cffafe"
+    stroke-width="2.5"
+    stroke-linecap="round"
+    fill="none"
+  />
+
+  <!-- Right Platinum 'F' & 'X' Interlocking Blades -->
+  <!-- Top Blade: Upper-Right X Arm + F Top Bar -->
+  <polygon
+    points="252,216 314,148 438,148 404,186 330,186 284,236"
+    fill="url(#platinumBright)"
+  />
+  <polygon
+    points="284,236 330,186 404,186 395,196 334,196 292,243"
+    fill="url(#platinumBevel)"
+  />
+
+  <!-- Middle Blade: F Center Bar -->
+  <polygon
+    points="286,258 324,216 398,216 366,252 332,252 310,276"
+    fill="url(#platinumBright)"
+  />
+  <polygon
+    points="310,276 332,252 366,252 358,261 335,261 317,282"
+    fill="url(#platinumBevel)"
+  />
+
+  <!-- Lower Blade: Lower-Right X Leg -->
+  <polygon
+    points="252,284 284,250 378,352 314,352"
+    fill="url(#platinumBright)"
+  />
+  <polygon
+    points="252,284 266,269 342,352 314,352"
+    fill="url(#platinumBevel)"
+  />
+
+  <!-- Crisp Specular Highlights -->
+  <polyline
+    points="253,216 314,149 436,149"
+    stroke="#ffffff"
+    stroke-width="2.5"
+    stroke-linecap="round"
+    fill="none"
+  />
+  <polyline
+    points="287,258 324,217 396,217"
+    stroke="#ffffff"
+    stroke-width="2"
+    stroke-linecap="round"
+    fill="none"
+  />
+</svg>

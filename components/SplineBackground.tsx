@@ -8,18 +8,23 @@ const SplineBackground: React.FC = () => {
   const [hasError, setHasError] = useState(false);
 
   return (
-    <div className="fixed inset-0 z-0 overflow-hidden bg-[#090d16]">
+    <div className="fixed inset-0 z-0 overflow-hidden bg-[#060a14]">
       {/* Fallback ambient background */}
-      <div className="absolute inset-0 bg-gradient-to-br from-[#090d16] via-[#0d1527] to-[#111a2e]" />
+      <div className="absolute inset-0 bg-gradient-to-br from-[#060a14] via-[#0b1528] to-[#0f172a]" />
       
+      {/* Luminous Ambient Orbs for Glassmorphism Refraction */}
+      <div className="absolute top-[-10%] left-[-5%] w-[45vw] h-[45vw] max-w-[620px] max-h-[620px] rounded-full bg-cyan-500/20 blur-[120px] pointer-events-none" />
+      <div className="absolute bottom-[-12%] right-[-5%] w-[50vw] h-[50vw] max-w-[680px] max-h-[680px] rounded-full bg-blue-600/20 blur-[130px] pointer-events-none" />
+      <div className="absolute top-[35%] left-[55%] w-[35vw] h-[35vw] max-w-[480px] max-h-[480px] rounded-full bg-indigo-500/15 blur-[110px] pointer-events-none" />
+
       {/* Decorative background grid */}
-      <div className="absolute inset-0 opacity-15 bg-[linear-gradient(to_right,#0891b220_1px,transparent_1px),linear-gradient(to_bottom,#0891b220_1px,transparent_1px)] bg-[size:40px_40px]" />
+      <div className="absolute inset-0 opacity-20 bg-[linear-gradient(to_right,#22d3ee18_1px,transparent_1px),linear-gradient(to_bottom,#22d3ee18_1px,transparent_1px)] bg-[size:48px_48px]" />
 
       {/* Spline 3D Scene Container */}
       {!hasError && (
         <motion.div
           initial={{ opacity: 0 }}
-          animate={{ opacity: isLoaded ? 0.75 : 0 }}
+          animate={{ opacity: isLoaded ? 0.92 : 0 }}
           transition={{ duration: 1.5, ease: 'easeOut' }}
           className="absolute inset-0 w-full h-full flex items-center justify-center select-none pointer-events-none md:pointer-events-auto"
         >

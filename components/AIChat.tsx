@@ -5,11 +5,12 @@
 
 
 import React, { useState, useRef, useEffect } from 'react';
-import { MessageCircle, X, Send, Sparkles } from 'lucide-react';
+import { MessageCircle, X, Send } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { sendMessageToGemini } from '../services/geminiService';
 import { ChatMessage } from '../types';
 import { saveChatSessionMessage } from '../services/firebase';
+import { XetaForgeEmblem } from './XetaForgeLogo';
 
 const AIChat: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -76,23 +77,23 @@ const AIChat: React.FC = () => {
             initial={{ opacity: 0, y: 20, scale: 0.9 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 20, scale: 0.9 }}
-            className="mb-4 w-[90vw] md:w-96 bg-slate-950/95 backdrop-blur-xl border border-white/10 rounded-2xl overflow-hidden shadow-2xl shadow-cyan-500/10"
+            className="mb-4 w-[90vw] md:w-96 glass-panel rounded-3xl overflow-hidden"
           >
             {/* Header */}
-            <div className="bg-gradient-to-r from-cyan-950/80 to-slate-900/80 p-3.5 px-4 flex justify-between items-center border-b border-white/10">
+            <div className="bg-white/[0.06] backdrop-blur-xl p-3.5 px-4 flex justify-between items-center border-b border-white/15">
               <div className="flex items-center gap-2.5">
-                <div className="p-1.5 bg-cyan-500/20 rounded-lg text-cyan-400 border border-cyan-500/30">
+                <div className="p-1.5 bg-cyan-400/20 rounded-xl text-cyan-300 border border-cyan-300/30 shadow-[inset_0_1px_1px_rgba(255,255,255,0.3)]">
                   <Sparkles className="w-4 h-4" />
                 </div>
                 <div>
                   <h3 className="font-heading font-bold text-white tracking-wider text-xs flex items-center gap-1.5">
                     <span>XETA</span>
-                    <span className="text-cyan-400">AI</span>
+                    <span className="text-cyan-300">AI</span>
                   </h3>
-                  <span className="text-[9px] font-mono text-cyan-400/80 tracking-widest block">ONLINE • ASSISTANT</span>
+                  <span className="text-[9px] font-mono text-cyan-300/80 tracking-widest block">ONLINE · ASSISTANT</span>
                 </div>
               </div>
-              <button onClick={() => setIsOpen(false)} className="text-white/50 hover:text-white" data-hover="true">
+              <button onClick={() => setIsOpen(false)} className="text-white/60 hover:text-white" data-hover="true">
                 <X className="w-5 h-5" />
               </button>
             </div>
@@ -100,7 +101,7 @@ const AIChat: React.FC = () => {
             {/* Messages */}
             <div 
               ref={chatContainerRef}
-              className="h-64 md:h-80 overflow-y-auto p-4 space-y-3 scroll-smooth bg-slate-950/40"
+              className="h-64 md:h-80 overflow-y-auto p-4 space-y-3 scroll-smooth bg-slate-950/25 backdrop-blur-md"
             >
               {messages.map((msg, idx) => (
                 <div
@@ -108,10 +109,10 @@ const AIChat: React.FC = () => {
                   className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}
                 >
                   <div
-                    className={`max-w-[85%] p-3 rounded-lg text-sm ${
+                    className={`max-w-[85%] p-3.5 rounded-2xl text-sm ${
                       msg.role === 'user'
-                        ? 'bg-cyan-500 text-slate-950 rounded-tr-none font-medium'
-                        : 'bg-white/5 text-slate-200 rounded-tl-none border border-white/10'
+                        ? 'glass-button-primary text-white rounded-tr-none font-medium'
+                        : 'bg-white/[0.08] backdrop-blur-md text-slate-100 rounded-tl-none border border-white/15 shadow-[inset_0_1px_1px_rgba(255,255,255,0.2)]'
                     }`}
                   >
                     {msg.text}
@@ -120,17 +121,17 @@ const AIChat: React.FC = () => {
               ))}
               {isLoading && (
                 <div className="flex justify-start">
-                  <div className="bg-white/5 p-3 rounded-lg rounded-tl-none border border-white/10 flex gap-1">
-                    <span className="w-1.5 h-1.5 bg-cyan-400 rounded-full animate-bounce" style={{ animationDelay: '0ms' }} />
-                    <span className="w-1.5 h-1.5 bg-cyan-400 rounded-full animate-bounce" style={{ animationDelay: '150ms' }} />
-                    <span className="w-1.5 h-1.5 bg-cyan-400 rounded-full animate-bounce" style={{ animationDelay: '300ms' }} />
+                  <div className="bg-white/[0.08] backdrop-blur-md p-3 rounded-2xl rounded-tl-none border border-white/15 flex gap-1">
+                    <span className="w-1.5 h-1.5 bg-cyan-300 rounded-full animate-bounce" style={{ animationDelay: '0ms' }} />
+                    <span className="w-1.5 h-1.5 bg-cyan-300 rounded-full animate-bounce" style={{ animationDelay: '150ms' }} />
+                    <span className="w-1.5 h-1.5 bg-cyan-300 rounded-full animate-bounce" style={{ animationDelay: '300ms' }} />
                   </div>
                 </div>
               )}
             </div>
 
             {/* Input */}
-            <div className="p-3 border-t border-white/10 bg-slate-950">
+            <div className="p-3 border-t border-white/15 bg-white/[0.04] backdrop-blur-xl">
               <div className="flex gap-2">
                 <input
                   type="text"
@@ -143,15 +144,15 @@ const AIChat: React.FC = () => {
                     }
                   }}
                   placeholder="Ask about Web Dev, AI Automation..."
-                  className="flex-1 bg-transparent text-white placeholder-slate-500 text-sm focus:outline-none"
+                  className="flex-1 bg-transparent text-white placeholder-slate-400 text-sm focus:outline-none px-2"
                 />
                 <button
                   onClick={handleSend}
                   disabled={isLoading || !input.trim()}
-                  className="bg-cyan-500 p-2 rounded-lg hover:bg-cyan-400 transition-colors disabled:opacity-50 text-slate-950"
+                  className="glass-button-primary p-2.5 rounded-xl transition-all disabled:opacity-50 text-white"
                   data-hover="true"
                 >
-                  <Send className="w-4 h-4 text-slate-950" />
+                  <Send className="w-4 h-4 text-white" />
                 </button>
               </div>
             </div>
@@ -161,10 +162,10 @@ const AIChat: React.FC = () => {
 
       {/* Toggle Button */}
       <motion.button
-        whileHover={{ scale: 1.1 }}
-        whileTap={{ scale: 0.9 }}
+        whileHover={{ scale: 1.08 }}
+        whileTap={{ scale: 0.94 }}
         onClick={() => setIsOpen(!isOpen)}
-        className="w-12 h-12 md:w-14 md:h-14 rounded-full bg-gradient-to-tr from-cyan-500 to-blue-600 flex items-center justify-center shadow-lg shadow-cyan-500/20 border border-white/20 z-50 group"
+        className="w-12 h-12 md:w-14 md:h-14 rounded-full glass-button-primary flex items-center justify-center z-50 group"
         data-hover="true"
       >
         {isOpen ? (
