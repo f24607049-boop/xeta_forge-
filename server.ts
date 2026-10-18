@@ -11,6 +11,11 @@ function getLocalConciergeResponse(message: string): string {
     return "Greetings! ⚡ I am **XETA AI**, the architectural assistant for **Xeta Forge**.\n\nWe engineer production-ready **Web Architectures**, **Mobile Apps**, **Custom AI Model Training**, **AI Automation Workflows**, and **Conversational Chatbots**. How can I assist your product roadmap today?";
   }
 
+  // Core Services Overview & Capabilities
+  if (lower.match(/\b(service|services|offer|what do you do|capabilities|solutions|features|what you do)\b/)) {
+    return "⚡ **Core Capabilities at XETA Forge:**\n\n• **Next-Gen Web Development:** High-velocity React, Next.js, and TypeScript architectures with edge-level speed.\n• **Custom Mobile Applications:** High-performance iOS & Android apps with offline sync and biometric security.\n• **Custom AI Model Training:** Bespoke LLM fine-tuning (LoRA/QLoRA), dataset curation, and private inference.\n• **Intelligent AI Automation:** Multi-agent workflows eliminating repetitive daily tasks and data silos.\n• **Conversational AI & Chatbots:** Context-aware assistants engaging customers 24/7 across Web & WhatsApp.\n\nWhich solution would you like to explore or scope?";
+  }
+
   // App Development (Mobile, iOS, Android, React Native, Flutter)
   if (lower.match(/\b(mobile|ios|android|flutter|react native|native app|mobile app|app development|smartphone|play store|app store)\b/)) {
     return "📱 **Custom App Development at XETA Forge:**\n\n• **Cross-Platform & Native:** High-performance iOS and Android apps built with React Native and Flutter.\n• **User Experience:** 60fps fluid animations, offline-first data sync, biometric security, and push notifications.\n• **Full Lifecycle:** Complete architecture, embedded AI features, and end-to-end App Store & Google Play deployment.\n\nWould you like to scope your mobile app project with our team?";
@@ -127,9 +132,16 @@ Xeta Forge Services:
 
 Company Name: Xeta Forge
 WhatsApp Contact: +923711889382
-Call to Action: Users can "Book a Consultation" or "Get a Quote" directly on the page!
+Direct WhatsApp Link: [Chat on WhatsApp](https://wa.me/923711889382)
+Call to Action: Guide users to "Book a Consultation" on the site or chat directly on WhatsApp (+923711889382).
 
-Keep responses under 70 words, punchy, and B2B professional. Guide users towards booking a consultation for their web, app, model training, or AI automation projects!`;
+FORMATTING RULES:
+- Keep answers concise, scannable, and attractive (under 80 words).
+- Never output overwhelming, unformatted walls of text.
+- Use bold **Title** for key concepts.
+- Use clean bullet points (• or *) for lists, with each item on its own separate line.
+- When listing services, give a clean 1-line bullet for each rather than dense paragraphs.
+- Always include an encouraging call to action.`;
 
       const response = await ai.models.generateContent({
         model: "gemini-3.8-flash",
