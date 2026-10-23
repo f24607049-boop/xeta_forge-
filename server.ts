@@ -78,11 +78,11 @@ async function startServer() {
     
     // Security check: validate input presence, type, and length
     if (!message || typeof message !== 'string' || message.trim().length === 0) {
-      return res.status(400).json({ text: "System Warning: Invalid transmission payload." });
+      return res.status(400).json({ reply: "System Warning: Invalid transmission payload.", text: "System Warning: Invalid transmission payload." });
     }
     
     if (message.length > 1000) {
-      return res.status(400).json({ text: "System Warning: Payload exceeds maximum limit of 1000 characters." });
+      return res.status(400).json({ reply: "System Warning: Payload exceeds maximum limit of 1000 characters.", text: "System Warning: Payload exceeds maximum limit of 1000 characters." });
     }
 
     // Check GEMINI_API_KEY first (platform standard), then fallback to GEMINI_API
@@ -96,7 +96,7 @@ async function startServer() {
 
     if (!API_KEY || !isStandardApiKey) {
       const fallbackResponse = getLocalConciergeResponse(message);
-      return res.json({ text: fallbackResponse });
+      return res.json({ reply: fallbackResponse, text: fallbackResponse });
     }
 
     try {
@@ -152,12 +152,12 @@ FORMATTING RULES:
       });
 
       const text = response.text || getLocalConciergeResponse(message);
-      return res.json({ text });
+      return res.json({ reply: text, text });
     } catch (error) {
       console.warn("Live Gemini API call failed, activating built-in concierge fallback:", error);
       // Seamless $0 fallback: Never show error screens to users
       const fallbackResponse = getLocalConciergeResponse(message);
-      return res.json({ text: fallbackResponse });
+      return res.json({ reply: fallbackResponse, text: fallbackResponse });
     }
   });
 

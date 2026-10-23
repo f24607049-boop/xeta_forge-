@@ -16,8 +16,8 @@ export const sendMessageToGemini = async (message: string): Promise<string> => {
     if (!response.ok) {
       try {
         const errData = await response.json();
-        if (errData && errData.text) {
-          return errData.text;
+        if (errData && (errData.reply || errData.text)) {
+          return errData.reply || errData.text;
         }
       } catch (e) {
         // ignore JSON parsing errors for non-JSON error responses
@@ -26,7 +26,7 @@ export const sendMessageToGemini = async (message: string): Promise<string> => {
     }
 
     const data = await response.json();
-    return data.text || "Transmission interrupted.";
+    return data.reply || data.text || "Transmission interrupted.";
   } catch (error) {
     console.error("Gemini client-side proxy error:", error);
     return "Signal lost. XETA AI is currently offline.";

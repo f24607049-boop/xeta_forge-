@@ -6,7 +6,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { MessageCircle, X, Send, RotateCcw, Sparkles } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { sendMessageToGemini } from '../services/geminiService';
 import { ChatMessage } from '../types';
 import { saveChatSessionMessage } from '../services/firebase';
 import { XetaForgeEmblem } from './XetaForgeLogo';
@@ -71,7 +70,31 @@ const AIChat: React.FC = () => {
 
     setTimeout(scrollToBottom, 50);
 
-    const responseText = await sendMessageToGemini(trimmed);
+    let responseText = "Signal lost. XETA AI is currently offline.";
+    try {
+      const response = await fetch('/api/chat', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ message: trimmed }),
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        responseText = data.reply || data.text || "Transmission interrupted.";
+      } else {
+        try {
+          const errData = await response.json();
+          responseText = errData.reply || errData.text || `Server responded with status ${response.status}`;
+        } catch {
+          responseText = `Server responded with status ${response.status}`;
+        }
+      }
+    } catch (error) {
+      console.error("Chat API error:", error);
+      responseText = "Signal lost. XETA AI is currently offline.";
+    }
 
     const finalMessages: ChatMessage[] = [
       ...updatedMessages,
