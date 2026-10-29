@@ -134,10 +134,10 @@ const AIChat: React.FC = () => {
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 24, scale: 0.94 }}
             transition={{ type: 'spring', damping: 25, stiffness: 320 }}
-            className="mb-4 w-[92vw] sm:w-[440px] h-[520px] max-h-[82vh] glass-panel rounded-3xl overflow-hidden flex flex-col shadow-[0_20px_50px_rgba(0,0,0,0.6),0_0_30px_rgba(6,182,212,0.15)] border border-white/20"
+            className="mb-3 w-[calc(100vw-24px)] sm:w-[440px] h-[480px] sm:h-[520px] max-h-[75vh] glass-panel rounded-2xl sm:rounded-3xl overflow-hidden flex flex-col shadow-[0_20px_50px_rgba(0,0,0,0.6),0_0_30px_rgba(6,182,212,0.15)] border border-white/20"
           >
             {/* Header */}
-            <div className="bg-slate-950/40 backdrop-blur-2xl p-3.5 px-4 flex justify-between items-center border-b border-white/10 shrink-0">
+            <div className="bg-slate-950/50 backdrop-blur-2xl p-3 sm:p-3.5 px-3.5 sm:px-4 flex justify-between items-center border-b border-white/10 shrink-0">
               <div className="flex items-center gap-2.5">
                 <div className="relative p-1.5 bg-gradient-to-br from-cyan-400/25 to-blue-500/20 rounded-xl text-cyan-300 border border-cyan-300/40 shadow-[inset_0_1px_1px_rgba(255,255,255,0.4),0_0_15px_rgba(6,182,212,0.25)] flex items-center justify-center">
                   <XetaForgeEmblem size={20} className="w-5 h-5" />
@@ -252,7 +252,7 @@ const AIChat: React.FC = () => {
                     }
                   }}
                   placeholder="Ask about Web Dev, AI Models, Pricing..."
-                  className="flex-1 bg-transparent text-white placeholder-slate-400 text-xs sm:text-sm focus:outline-none py-1"
+                  className="flex-1 bg-transparent text-white placeholder-slate-400 text-base sm:text-sm focus:outline-none py-1"
                 />
                 <button
                   onClick={() => handleSendMessage(input)}
