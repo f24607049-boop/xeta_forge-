@@ -1,93 +1,54 @@
-# Responsive 3D Robot Viewport & Environment Scaling
+# Implementation Plan - Standard Simple Cursor Restoration
 
-Deliver an adaptive, viewport-aware presentation of the Spline 3D robot background that scales down gracefully on mobile devices (60% scale) while preserving breathing room for hero typography, ensuring smooth mobile touch scrolling, and presenting a majestic full-scale presence on desktop.
+## Summary
+Transition the cursor experience from an animated custom cursor (Framer Motion spring follower, crosshair accents, tracking ring, and text label) to the clean, native operating system cursor. This delivers a responsive, lag-free experience with standard browser pointer behavior (`cursor: pointer` on clickable elements, native arrow elsewhere) and eliminates mousemove listener overhead.
+
+---
 
 ## User Review & Critical Decisions
-
-> [!IMPORTANT]
-> Based on your selections in Phase 1, the following core specifications have been established for the robot viewport adjustments:
->
-> - **Mobile Scale Target**: 60% scale on mobile viewports (<640px) to prevent the 3D model from overpowering the screen, with graduated steps for tablet (75%–85%) and desktop (100%).
-> - **Touch Gesture Handling**: Pass-through touch behavior on mobile (`pointer-events-none` on mobile, interactive on desktop `md:pointer-events-auto`) so user swipes and scrolls are butter-smooth without accidental 3D model capture.
-> - **Spatial Placement**: Centered background positioning with optical vertical offsetting (`translate-y`) calculated to give comfortable breathing room beneath the headline and CTA buttons.
+Based on your preferences:
+1. **Cursor Style**: Standard default operating system cursor with zero custom overlays, dots, or trailing rings.
+2. **Hover Interaction**: Natural browser pointer hand on all buttons, links, toggles, and interactive elements.
+3. **Performance & Cleanliness**: Decommission the global `mousemove` event listener and spring animation loops in `CustomCursor.tsx` to free CPU/GPU cycles.
 
 ---
 
 ## 1. Overview & Core Concept
-
-- **What It Does**: Enhances `SplineBackground.tsx` to automatically adapt the 3D robot's size, transform origin, and vertical centering across mobile, tablet, and desktop viewports using CSS hardware-accelerated transforms.
-- **Target Audience**: Mobile and desktop visitors browsing XetaForge on diverse devices (smartphones, foldables, tablets, ultrawides).
-- **Key Value**: Solves mobile visual crowding where the 3D robot previously consumed excessive viewport space, establishing balanced typographic hierarchy and uninhibited scrolling.
+- **Current State**: The application renders `<CustomCursor />` globally from `App.tsx`, maintaining spring-interpolated coordinates, scaled rings, expanding hover states, and SVG crosshairs at `z-index: 10000`.
+- **Target State**: Fully native cursor behavior. The operating system handles cursor rendering directly with hardware acceleration at the display's native refresh rate, with standard pointer cues on interactive UI controls.
 
 ---
 
-## 2. User Experience & Visual Design
-
-### Viewport Scaling Hierarchy
-- **Mobile (< 640px)**: 
-  - Scale: `0.60` (60%)
-  - Alignment: Centered with subtle `-translate-y-4` to sit harmoniously behind the hero text and action buttons without clipping.
-  - Interaction: Touch events pass through to underlying sections; page scrolling is completely effortless.
-- **Tablet / Phablet (640px – 1024px)**:
-  - Scale: `0.78` (78%)
-  - Alignment: Centered vertically and horizontally.
-- **Desktop (1024px+)**:
-  - Scale: `1.0` (100%)
-  - Alignment: Full-size immersive presentation with ambient illumination, desktop mouse interaction, and particle refraction.
-
-### Interaction & Touch Policy
-- Retains `pointer-events-none` on mobile touchscreens to guarantee that vertical finger scrolling is never intercepted or stalled by the WebGL canvas.
-- Re-enables pointer interaction on medium-and-above screens (`md:pointer-events-auto`) so desktop mouse drag and cursor tracking remain fully interactive.
+## 2. UX & Visual Design
+- **Default State**: Native system arrow cursor across backgrounds, text, and general layout sections.
+- **Interactive State**: Native browser pointer (`pointer`) over buttons, nav links, interactive cards, drawer controls, and 3D interaction triggers.
+- **Text Selection**: Native I-beam cursor across text inputs and selectable content.
+- **Mobile / Touch**: Touch interactions remain completely unhindered with no ghost pointer artifacts or touch offsets.
 
 ---
 
-## 3. Key Product Decisions & Trade-Offs
-
-- **Decision 1: CSS Hardware Transforms vs. Window Resize JS State**:
-  - *Chosen Approach*: Pure CSS media-query utility classes (`scale-[0.60] sm:scale-[0.78] lg:scale-100`) combined with `transform-gpu origin-center`.
-  - *Why*: Eliminates JavaScript resize listeners, eliminates layout re-renders on scroll or keyboard open/close, avoids hydration flicker, and leverages GPU compositing.
-  - *Alternatives Considered*: Dynamic JS resize listeners were previously tested, but caused re-render latency and jitter during orientation flips.
-
-- **Decision 2: Canvas Wrapper Isolation**:
-  - *Chosen Approach*: Apply scaling directly to an inner container wrapping the `<Spline />` component while keeping the ambient glow orbs and gradient background at 100% full viewport bleed.
-  - *Why*: Prevents ambient glow effects and background cyber-grid lines from shrinking or clipping, maintaining full edge-to-edge atmosphere.
+## 3. Key Product Decisions
+- **Complete Teardown vs. Dummy Stub**: Remove `<CustomCursor />` from `App.tsx` and cleanly clean up or neutralize `components/CustomCursor.tsx`, avoiding dead background event listeners or unused bundle baggage.
+- **CSS Audit**: Verify `index.html`, `src/index.css`, and global utility classes to verify no `cursor: none` or forced custom styling suppresses the native cursor.
+- **Interactive Affordances**: Ensure interactive components retain proper Tailwind `cursor-pointer` classes where appropriate so the browser hand indicator is crisp and immediate.
 
 ---
 
-## 4. Technical Architecture & Component Structure
+## 4. Technical Architecture & Implementation Steps
 
-```
-┌──────────────────────────────────────────────────────────────┐
-│                    SplineBackground Component                │
-│                                                              │
-│  ┌────────────────────────────────────────────────────────┐  │
-│  │ Ambient Glow Orbs & Cybernetic Grid (Full Viewport)    │  │
-│  └────────────────────────────────────────────────────────┘  │
-│                                                              │
-│  ┌────────────────────────────────────────────────────────┐  │
-│  │ motion.div Container (Fade-in on WebGL Scene Ready)     │  │
-│  │                                                        │  │
-│  │  ┌──────────────────────────────────────────────────┐  │  │
-│  │  │ Responsive Scaled & Offset Canvas Wrapper        │  │  │
-│  │  │  • Mobile: scale-60, -translate-y-4              │  │  │
-│  │  │  • Tablet: scale-78                              │  │  │
-│  │  │  • Desktop: scale-100                            │  │  │
-│  │  │  • Pointer events: none (mobile) / auto (desktop)│  │  │
-│  │  │                                                  │  │  │
-│  │  │  ┌────────────────────────────────────────────┐  │  │  │
-│  │  │  │ <Spline scene="...scene.splinecode" />     │  │  │  │
-│  │  │  └────────────────────────────────────────────┘  │  │  │
-│  │  └──────────────────────────────────────────────────┘  │  │
-│  └────────────────────────────────────────────────────────┘  │
-└──────────────────────────────────────────────────────────────┘
-```
+### Step 1: Remove Custom Cursor Invocation
+- In `src/App.tsx`:
+  - Remove `import CustomCursor from './components/CustomCursor';`
+  - Remove `<CustomCursor />` from the JSX tree.
 
-### Component & Style Mapping
-- **File**: `components/SplineBackground.tsx`
-- **Class Configuration**:
-  ```tsx
-  <div className="w-full h-full flex items-center justify-center origin-center transform-gpu scale-[0.60] sm:scale-[0.78] lg:scale-100 -translate-y-4 sm:translate-y-0 transition-transform duration-500 ease-out">
-    <Spline ... />
-  </div>
-  ```
-- **Verification**: Run `compile_applet` to confirm zero lint or TypeScript errors.
+### Step 2: Global CSS & Style Verification
+- In `src/index.css` / `index.html`:
+  - Ensure `*` and `body` rules allow default cursor behavior.
+  - Confirm buttons and interactive elements retain natural `pointer` styling.
+
+### Step 3: Clean Up Custom Cursor Component
+- Replace or safely remove `src/components/CustomCursor.tsx` so no lingering window event listeners are registered.
+
+### Step 4: Verification
+- Execute `compile_applet` to ensure clean build with zero TypeScript or JSX errors.
+- Confirm seamless native cursor movement and hover responsiveness.

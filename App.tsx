@@ -12,7 +12,6 @@ import {
 } from 'lucide-react';
 import SplineBackground from './components/SplineBackground';
 import GradientText from './components/GlitchText';
-import CustomCursor from './components/CustomCursor';
 import ServiceCard from './components/ServiceCard';
 import AIChat from './components/AIChat';
 import XetaForgeLogo from './components/XetaForgeLogo';
@@ -278,8 +277,7 @@ const App: React.FC = () => {
   };
   
   return (
-    <div className="relative min-h-screen flex flex-col text-slate-100 selection:bg-cyan-500 selection:text-slate-950 cursor-auto md:cursor-none overflow-x-hidden">
-      <CustomCursor />
+    <div className="relative min-h-screen flex flex-col text-slate-100 selection:bg-cyan-500 selection:text-slate-950 overflow-x-hidden">
       <SplineBackground />
       
       {/* Floating Chat Widget */}
