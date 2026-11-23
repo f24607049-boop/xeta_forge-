@@ -3,21 +3,86 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { initializeApp } from 'firebase/app';
-import { getFirestore, collection, addDoc, serverTimestamp } from 'firebase/firestore';
+import { initializeApp, getApps } from 'firebase/app';
+import { getAuth } from 'firebase/auth';
+import {
+  getFirestore,
+  collection,
+  addDoc,
+  serverTimestamp,
+  doc,
+  getDocFromServer,
+} from 'firebase/firestore';
+import firebaseConfig from '../firebase-applet-config.json';
 
-// Configuration from firebase-applet-config.json
-const firebaseConfig = {
-  apiKey: "AIzaSyC9DzMZ_SzQsrcsLaeUejtLJSBNynFdvJM",
-  authDomain: "gen-lang-client-0523171342.firebaseapp.com",
-  projectId: "gen-lang-client-0523171342",
-  storageBucket: "gen-lang-client-0523171342.firebasestorage.app",
-  messagingSenderId: "249094342896",
-  appId: "1:249094342896:web:8bfc44cedb9cf1a792da35"
-};
+const app = getApps().length ? getApps()[0] : initializeApp(firebaseConfig);
+export const db = getFirestore(app, firebaseConfig.firestoreDatabaseId);
+export const auth = getAuth(app);
 
-const app = initializeApp(firebaseConfig);
-export const db = getFirestore(app, "ai-studio-xetaforge-6c6e1ff3-6df5-4011-90b2-e3ccb264372f");
+export enum OperationType {
+  CREATE = 'create',
+  UPDATE = 'update',
+  DELETE = 'delete',
+  LIST = 'list',
+  GET = 'get',
+  WRITE = 'write',
+}
+
+export interface FirestoreErrorInfo {
+  error: string;
+  operationType: OperationType;
+  path: string | null;
+  authInfo: {
+    userId?: string | null;
+    email?: string | null;
+    emailVerified?: boolean | null;
+    isAnonymous?: boolean | null;
+    tenantId?: string | null;
+    providerInfo?: {
+      providerId?: string | null;
+      email?: string | null;
+    }[];
+  };
+}
+
+export function handleFirestoreError(
+  error: unknown,
+  operationType: OperationType,
+  path: string | null
+): never {
+  const errInfo: FirestoreErrorInfo = {
+    error: error instanceof Error ? error.message : String(error),
+    authInfo: {
+      userId: auth.currentUser?.uid ?? null,
+      email: auth.currentUser?.email ?? null,
+      emailVerified: auth.currentUser?.emailVerified ?? null,
+      isAnonymous: auth.currentUser?.isAnonymous ?? null,
+      tenantId: auth.currentUser?.tenantId ?? null,
+      providerInfo:
+        auth.currentUser?.providerData?.map((provider) => ({
+          providerId: provider.providerId,
+          email: provider.email,
+        })) || [],
+    },
+    operationType,
+    path,
+  };
+  console.error('Firestore Error:', JSON.stringify(errInfo));
+  throw new Error(JSON.stringify(errInfo));
+}
+
+let connectionChecked = false;
+export async function testConnection(): Promise<void> {
+  if (connectionChecked) return;
+  connectionChecked = true;
+  try {
+    await getDocFromServer(doc(db, 'test', 'connection'));
+  } catch (error) {
+    if (error instanceof Error && error.message.includes('the client is offline')) {
+      console.error('Please check your Firebase configuration.');
+    }
+  }
+}
 
 export interface ConsultationBrief {
   name: string;
@@ -28,16 +93,20 @@ export interface ConsultationBrief {
 }
 
 export const saveConsultation = async (brief: ConsultationBrief): Promise<string> => {
+  await testConnection();
+  const path = 'consultations';
   try {
-    const docRef = await addDoc(collection(db, 'consultations'), {
-      ...brief,
-      createdAt: serverTimestamp()
+    const docRef = await addDoc(collection(db, path), {
+      name: brief.name.trim().slice(0, 120),
+      company: brief.company.trim().slice(0, 120),
+      email: brief.email.trim().slice(0, 254),
+      projectType: brief.projectType.trim().slice(0, 100),
+      message: brief.message.trim().slice(0, 2000),
+      createdAt: serverTimestamp(),
     });
-    console.log("Consultation saved with ID:", docRef.id);
     return docRef.id;
   } catch (error) {
-    console.error("Firebase store consultation error:", error);
-    throw error;
+    handleFirestoreError(error, OperationType.CREATE, path);
   }
 };
 
@@ -47,15 +116,26 @@ export interface ChatMessageSession {
   timestamp: string;
 }
 
-export const saveChatSessionMessage = async (sessionId: string, messages: ChatMessageSession[]): Promise<void> => {
+export const saveChatSessionMessage = async (
+  sessionId: string,
+  messages: ChatMessageSession[]
+): Promise<void> => {
+  await testConnection();
+  const path = 'chat_sessions';
+  const safeSessionId = sessionId.replace(/[^a-zA-Z0-9_-]/g, '').slice(0, 100) || 'session_default';
+  const boundedMessages = messages.slice(-50).map((m) => ({
+    role: m.role === 'user' ? 'user' : 'model',
+    text: String(m.text).slice(0, 4000),
+    timestamp: String(m.timestamp).slice(0, 64),
+  }));
+
   try {
-    const sessionRef = collection(db, 'chat_sessions');
-    await addDoc(sessionRef, {
-      sessionId,
-      messages,
-      updatedAt: serverTimestamp()
+    await addDoc(collection(db, path), {
+      sessionId: safeSessionId,
+      messages: boundedMessages,
+      updatedAt: serverTimestamp(),
     });
   } catch (error) {
-    console.error("Error saving chat session message:", error);
+    handleFirestoreError(error, OperationType.CREATE, path);
   }
 };

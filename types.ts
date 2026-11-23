@@ -1,16 +1,37 @@
 /**
  * @license
  * SPDX-License-Identifier: Apache-2.0
-*/
+ */
+
+export type PageId = 'home' | 'services' | 'process' | 'about' | 'contact';
+
+export type ServiceVisualId = 'web' | 'automation' | 'chatbot' | 'mobile' | 'training';
 
 export interface Service {
   id: string;
-  title: string;
-  tagline: string;
+  visualId: ServiceVisualId;
   image: string;
-  statusTag: string; // e.g., "Scalable", "Efficient", "24/7 Smart"
+  imageAlt: string;
+  title: string;
+  category: string;
+  outcome: string;
   description: string;
+  deliverable: string;
   features: string[];
+}
+
+export interface ProcessStep {
+  step: string;
+  title: string;
+  summary: string;
+  details: string;
+  artifact: string;
+}
+
+export interface EngagementScope {
+  name: string;
+  tag: string;
+  description: string;
 }
 
 export interface ChatMessage {
@@ -18,12 +39,3 @@ export interface ChatMessage {
   text: string;
   isError?: boolean;
 }
-
-export enum Section {
-  HERO = 'hero',
-  SERVICES = 'services',
-  PROCESS = 'process',
-  ABOUT = 'about',
-  CONTACT = 'contact',
-}
-

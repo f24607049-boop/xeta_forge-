@@ -1,25 +1,57 @@
 rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
-    
-    // Security check for consultations collection
+
+    // Global default-deny safety net
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    function isValidId(id) {
+      return id is string && id.size() > 0 && id.size() <= 128 && id.matches('^[a-zA-Z0-9_\\-]+$');
+    }
+
+    function isValidConsultation(data) {
+      return data.keys().hasAll(['name', 'company', 'email', 'projectType', 'message', 'createdAt'])
+        && data.keys().hasOnly(['name', 'company', 'email', 'projectType', 'message', 'createdAt'])
+        && data.name is string && data.name.size() >= 1 && data.name.size() <= 120
+        && data.company is string && data.company.size() <= 120
+        && data.email is string && data.email.size() >= 5 && data.email.size() <= 254
+        && data.email.matches('^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$')
+        && data.projectType is string && data.projectType.size() >= 1 && data.projectType.size() <= 100
+        && data.message is string && data.message.size() <= 2000
+        && data.createdAt == request.time;
+    }
+
+    function isValidChatMessage(msg) {
+      return msg is map
+        && msg.keys().hasAll(['role', 'text', 'timestamp'])
+        && msg.keys().hasOnly(['role', 'text', 'timestamp'])
+        && (msg.role == 'user' || msg.role == 'model')
+        && msg.text is string && msg.text.size() >= 1 && msg.text.size() <= 4000
+        && msg.timestamp is string && msg.timestamp.size() >= 1 && msg.timestamp.size() <= 64;
+    }
+
+    function isValidChatSession(data) {
+      return data.keys().hasAll(['sessionId', 'messages', 'updatedAt'])
+        && data.keys().hasOnly(['sessionId', 'messages', 'updatedAt'])
+        && data.sessionId is string && data.sessionId.size() >= 6 && data.sessionId.size() <= 100
+        && data.sessionId.matches('^[a-zA-Z0-9_\\-]+$')
+        && data.messages is list && data.messages.size() >= 1 && data.messages.size() <= 50
+        && isValidChatMessage(data.messages[0])
+        && data.updatedAt == request.time;
+    }
+
+    // Consultations: allow validated intake submissions only; block all public reads, updates, and deletes
     match /consultations/{consultationId} {
-      // Allow any visitor to submit a brief
-      allow create: if request.resource.data.name is string 
-                    && request.resource.data.name.size() > 0
-                    && request.resource.data.email is string 
-                    && request.resource.data.email.matches("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$")
-                    && request.resource.data.projectType is string
-                    && request.resource.data.message is string;
-      
-      // Prevent any public reading, listing, editing, or deleting of other users' briefs
+      allow create: if isValidId(consultationId) && isValidConsultation(request.resource.data);
       allow read, update, delete: if false;
     }
 
-    // Security check for chat session memories
-    match /chat_sessions/{sessionId} {
-      allow read, create, update: if true;
-      allow delete: if false;
+    // Chat sessions: allow validated append-only creation; block all public reads and unauthorized edits/deletes
+    match /chat_sessions/{docId} {
+      allow create: if isValidId(docId) && isValidChatSession(request.resource.data);
+      allow read, update, delete: if false;
     }
   }
 }

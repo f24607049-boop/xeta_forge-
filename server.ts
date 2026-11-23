@@ -2,100 +2,163 @@ import express from "express";
 import path from "path";
 import { GoogleGenAI } from "@google/genai";
 
-// $0 Built-in Autonomous Concierge Knowledge Engine (Runs with zero external API calls)
+// Sliding-window in-memory rate limiter for /api/chat
+const RATE_LIMIT_WINDOW_MS = 60 * 1000; // 1 minute
+const RATE_LIMIT_MAX_REQUESTS = 20;
+const rateLimitStore = new Map<string, number[]>();
+
+function isRateLimited(clientKey: string): { limited: boolean; retryAfterSec: number } {
+  const now = Date.now();
+  const windowStart = now - RATE_LIMIT_WINDOW_MS;
+  const timestamps = (rateLimitStore.get(clientKey) || []).filter((ts) => ts > windowStart);
+
+  if (timestamps.length >= RATE_LIMIT_MAX_REQUESTS) {
+    const oldestInWindow = timestamps[0];
+    const retryAfterSec = Math.max(1, Math.ceil((oldestInWindow + RATE_LIMIT_WINDOW_MS - now) / 1000));
+    rateLimitStore.set(clientKey, timestamps);
+    return { limited: true, retryAfterSec };
+  }
+
+  timestamps.push(now);
+  rateLimitStore.set(clientKey, timestamps);
+
+  // Periodic pruning to avoid unbounded memory growth
+  if (rateLimitStore.size > 5000) {
+    for (const [key, list] of rateLimitStore.entries()) {
+      const fresh = list.filter((ts) => ts > windowStart);
+      if (fresh.length === 0) rateLimitStore.delete(key);
+      else rateLimitStore.set(key, fresh);
+    }
+  }
+
+  return { limited: false, retryAfterSec: 0 };
+}
+
+function getClientIp(req: express.Request): string {
+  const forwarded = req.headers["x-forwarded-for"];
+  if (typeof forwarded === "string" && forwarded.trim().length > 0) {
+    return forwarded.split(",")[0].trim();
+  }
+  return req.ip || req.socket.remoteAddress || "unknown";
+}
+
+function validateChatMessage(body: unknown): { valid: true; message: string } | { valid: false; error: string } {
+  if (!body || typeof body !== "object" || Array.isArray(body)) {
+    return { valid: false, error: "Request body must be a JSON object." };
+  }
+
+  const rawMessage = (body as Record<string, unknown>).message;
+  if (typeof rawMessage !== "string") {
+    return { valid: false, error: "Please provide a valid text message." };
+  }
+
+  // Strip null bytes and ASCII control chars except newline/tab
+  const sanitized = rawMessage.replace(/[\x00-\x08\x0B\x0C\x0E-\x1F\x7F]/g, "").trim();
+
+  if (sanitized.length === 0) {
+    return { valid: false, error: "Message cannot be empty." };
+  }
+
+  if (sanitized.length > 1000) {
+    return { valid: false, error: "Message exceeds the 1,000-character limit." };
+  }
+
+  return { valid: true, message: sanitized };
+}
+
+// Built-in fallback knowledge engine (no external API required)
 function getLocalConciergeResponse(message: string): string {
   const lower = message.toLowerCase().trim();
 
-  // Greetings & Identity
   if (lower.match(/\b(hi|hello|hey|salam|assalam|greetings|morning|afternoon|evening|who are you|what is xeta|what are you)\b/)) {
-    return "Greetings! ⚡ I am **XETA AI**, the architectural assistant for **Xeta Forge**.\n\nWe engineer production-ready **Web Architectures**, **Mobile Apps**, **Custom AI Model Training**, **AI Automation Workflows**, and **Conversational Chatbots**. How can I assist your product roadmap today?";
+    return "Hello! I am the **Xeta Forge Helper**.\n\nWe build easy-to-use **Websites**, **Mobile Apps**, **Time-Saving Automations**, **Customer Chatbots**, and **Private Business AI Assistants** — all explained in plain English. How can we help?";
   }
 
-  // Core Services Overview & Capabilities
   if (lower.match(/\b(service|services|offer|what do you do|capabilities|solutions|features|what you do)\b/)) {
-    return "⚡ **Core Capabilities at XETA Forge:**\n\n• **Next-Gen Web Development:** High-velocity React, Next.js, and TypeScript architectures with edge-level speed.\n• **Custom Mobile Applications:** High-performance iOS & Android apps with offline sync and biometric security.\n• **Custom AI Model Training:** Bespoke LLM fine-tuning (LoRA/QLoRA), dataset curation, and private inference.\n• **Intelligent AI Automation:** Multi-agent workflows eliminating repetitive daily tasks and data silos.\n• **Conversational AI & Chatbots:** Context-aware assistants engaging customers 24/7 across Web & WhatsApp.\n\nWhich solution would you like to explore or scope?";
+    return "**How We Help Your Business:**\n\n- **Website Design & Building:** Clean, fast websites and booking pages tailored to your customers.\n- **Daily Task Automation:** Connect your emails, spreadsheets, and calendars so busywork runs automatically.\n- **Smart Customer Chatbots:** Instant website and WhatsApp answers trained strictly on your business FAQs.\n- **Mobile App Development:** Smooth apps for both iPhone and Android.\n- **Private AI Assistants:** Helpers trained privately on your company guides and tone.\n\nWhich one sounds closest to what you need?";
   }
 
-  // App Development (Mobile, iOS, Android, React Native, Flutter)
-  if (lower.match(/\b(mobile|ios|android|flutter|react native|native app|mobile app|app development|smartphone|play store|app store)\b/)) {
-    return "📱 **Custom App Development at XETA Forge:**\n\n• **Cross-Platform & Native:** High-performance iOS and Android apps built with React Native and Flutter.\n• **User Experience:** 60fps fluid animations, offline-first data sync, biometric security, and push notifications.\n• **Full Lifecycle:** Complete architecture, embedded AI features, and end-to-end App Store & Google Play deployment.\n\nWould you like to scope your mobile app project with our team?";
+  if (lower.match(/\b(mobile|ios|android|flutter|react native|native app|mobile app|app development|smartphone|play store|app store|iphone)\b/)) {
+    return "**Mobile App Development:**\n\n- Built to work smoothly on both iPhone and Android phones.\n- Keeps key details saved even if someone loses internet signal.\n- We handle full help getting your app into the Apple App Store and Google Play.\n\nVisit our **Contact** page anytime to chat about your app idea.";
   }
 
-  // AI Model Training & Fine-Tuning
-  if (lower.match(/\b(model training|train|training|fine-tuning|fine tuning|finetune|lora|qlora|rlhf|dataset|datasets|weights|neural|machine learning|ml model|custom model)\b/)) {
-    return "🧠 **Custom AI Model Training & Fine-Tuning:**\n\n• **Domain Fine-Tuning:** LoRA, QLoRA, and full-weight LLM alignment on your proprietary enterprise data.\n• **Dataset Engineering:** Curated dataset pipelines, cleaning, synthetic data generation, and RLHF alignment.\n• **Private Deployment:** Model quantization and low-latency inference on private cloud or on-prem infrastructure.\n\nWhat kind of custom AI model or domain dataset are you looking to train?";
+  if (lower.match(/\b(model training|train|training|fine-tuning|fine tuning|finetune|lora|qlora|rlhf|dataset|datasets|weights|neural|machine learning|ml model|custom model|private ai|helper)\b/)) {
+    return "**Private AI Assistants:**\n\n- Trained around your own company documents, pricing guides, and brand voice.\n- Tested carefully so answers stay helpful and accurate.\n- Kept private for your business alone.\n\nMessage us on the **Contact** page or WhatsApp to share what you have in mind.";
   }
 
-  // Web Development & Tech Stack
   if (lower.match(/\b(web|website|frontend|backend|react|next|fullstack|development|developer|design|stack|tech)\b/)) {
-    return "🌐 **Next-Gen Web Development at XETA Forge:**\n\n• **Core Stack:** Production React, Next.js, Vite, TypeScript, Tailwind CSS, & cloud-native APIs.\n• **Performance:** Edge-optimized with sub-second load times and high Lighthouse/SEO ratings.\n• **Security:** Enterprise-grade sanitization and robust database integrations.\n\nWould you like to discuss a custom web build or schedule a technical discovery call?";
+    return "**Website Design & Building:**\n\n- Fast, modern websites built cleanly for phones, tablets, and computers.\n- Easy-to-use forms, booking pages, and clear layouts.\n- You receive full ownership of your website and files.\n\nClick **Book a Free Chat** anytime on the Contact page.";
   }
 
-  // AI Automation & Pipelines
-  if (lower.match(/\b(automation|automate|workflow|pipeline|pipelines|agents|orchestration|repetitive|tasks|sync)\b/)) {
-    return "🤖 **Intelligent AI Automation:**\n\n• **Autonomous Agents:** Custom LLM orchestration aligned with your business logic.\n• **System Bridges:** Seamless integration between legacy databases, CRMs, and modern APIs.\n• **Data Pipelines:** Automated document parsing, indexing, and real-time synchronization.\n\nWhat manual bottlenecks would you like to automate?";
+  if (lower.match(/\b(automation|automate|workflow|pipeline|pipelines|agents|orchestration|repetitive|tasks|sync|busywork|save time)\b/)) {
+    return "**Daily Task Automation:**\n\n- Links your everyday forms, emails, calendars, and billing tools together.\n- Reduces manual copying and lets your team focus on customers instead of spreadsheets.\n\nTell us which daily chore takes too much time!";
   }
 
-  // Chatbots & Conversational AI
   if (lower.match(/\b(chatbot|chatbots|bot|bots|conversational|support|customer service|assistant|assistants|nlp)\b/)) {
-    return "💬 **Conversational AI & Chatbots:**\n\n• **Bespoke Intelligence:** Context-aware assistants trained on your proprietary knowledge bases.\n• **Multi-Platform:** Deployable across Web, Slack, and WhatsApp.\n• **Human Handoff:** Intelligent routing with automatic fallback to human team members.\n\nReady to engage your customers 24/7?";
+    return "**Smart Customer Chatbots:**\n\n- Answers common customer questions 24/7 using only your approved business information.\n- Connects smoothly with your website and WhatsApp, and hands over to a real person whenever needed.\n\nReach out via our **Contact** page to get started.";
   }
 
-  // Pricing, Cost, Rates, & Plans
   if (lower.match(/\b(price|pricing|cost|costs|rate|rates|quote|package|packages|budget|plan|plans|fee|fees|how much|dollar|dollars|\$)\b/)) {
-    return "💼 **Engagement Models & Pricing Structure:**\n\n1. **Technical Discovery:** Architecture audit, workflow assessment, & scope proposal.\n2. **Dedicated Product Forge:** End-to-end full-stack Web, Mobile App, & AI Model engineering.\n3. **Turnkey AI Suite:** Complete agent & conversational chatbot integration.\n\nAll engagements are transparently scoped for your project requirements. Click **'Book a Consultation'** or message us directly on WhatsApp for a custom roadmap!";
+    return "**Simple Ways to Work Together:**\n\n1. **Free Discovery Call:** A friendly chat to hear your goals and recommend the simplest setup.\n2. **Website or App Build:** Clear fixed steps with previews along the way.\n3. **Automation & Chatbots:** Tailored to the tools your team uses every day.\n\nClick **Book a Free Chat** or message us on WhatsApp (https://wa.me/923711889382) for a clear quote.";
   }
 
-  // Process, Timeline, & Methodology
   if (lower.match(/\b(process|timeline|how long|how it works|steps|methodology|duration|delivery|turnaround|speed)\b/)) {
-    return "⚡ **The 3-Phase Forge Methodology:**\n\n1. **Discovery & Blueprinting:** Deep audit, system mapping, and scope synthesis.\n2. **Agile Product Forging:** High-velocity TypeScript & mobile development with strict test coverage.\n3. **Cognitive LLM Alignment:** Custom model training, prompt optimization, and production deployment.\n\nTypical turnaround is between 2 to 6 weeks depending on project scope.";
+    return "**Our Four Simple Steps:**\n\n1. **Listen & Plan:** Talk through your goals in plain language and map a clear plan.\n2. **Design & Preview:** Review clickable previews and suggest changes early.\n3. **Build & Test:** Put everything together and check it carefully on phones and computers.\n4. **Launch & Handover:** Go live and hand over every login, file, and simple how-to guide.";
   }
 
-  // Contact, WhatsApp, & Consultation
   if (lower.match(/\b(contact|talk|call|meeting|consultation|book|whatsapp|email|hire|reach|phone|schedule)\b/)) {
-    return "🚀 **Connect Directly with Our Engineering Leads:**\n\n• **WhatsApp Direct:** [Chat on WhatsApp: +923711889382](https://wa.me/923711889382)\n• **Consultation Form:** Fill out the **Consultation Brief** at the bottom of the page.\n• **Email:** architects@xetaforge.com\n\nWe review all technical inquiries and respond within 24 hours!";
+    return "**Talk With Xeta Forge:**\n\n- **WhatsApp:** https://wa.me/923711889382\n- **Contact Form:** Visit our **Contact** page to tell us about your project\n- **Email:** architects@xetaforge.com\n\nWe reply within one business day.";
   }
 
-  // About, Team, & Track Record
   if (lower.match(/\b(about|who|team|company|experience|location|portfolio|agency|clients|guarantee)\b/)) {
-    return "🏢 **About Xeta Forge:**\n\nWe are a boutique engineering studio of full-stack web & mobile developers, ML engineers, and AI automation specialists. We have deployed 12+ custom LLM models, automated 50+ enterprise workflows, and maintained 100% client satisfaction.";
+    return "**About Xeta Forge:**\n\nWe build websites, mobile apps, and time-saving AI tools in plain everyday English—with full ownership handed directly to your business at launch.";
   }
 
-  // Default intelligent assistant response
-  return "⚡ **XETA Forge Systems Online:**\n\nI can answer any questions about our **Web Engineering**, **Custom App Development**, **AI Model Training**, **AI Automation**, **Chatbot Systems**, or **Pricing Models**.\n\nHow can we help power your digital growth? (You can also click **'Book a Consultation'** or reach us on WhatsApp at +923711889382!)";
+  return "I can answer questions in plain English about **Websites**, **Mobile Apps**, **Daily Task Automation**, **Customer Chatbots**, **Private AI Assistants**, or getting a quote.\n\nYou can also message our team directly on WhatsApp: https://wa.me/923711889382";
 }
 
 async function startServer() {
   const app = express();
+  app.set("trust proxy", true);
   const PORT = Number(process.env.PORT) || 3000;
 
-  // Limit incoming JSON payload to prevent denial of service (DoS) attacks
+  app.use((_req, res, next) => {
+    res.setHeader("X-Content-Type-Options", "nosniff");
+    next();
+  });
+
   app.use(express.json({ limit: "10kb" }));
 
-  // API Route for Gemini Chat with Input Sanitization & $0 Autonomous Fallback
+  // Chat endpoint with rate limiting, strict input validation, and graceful fallback
   app.post("/api/chat", async (req, res) => {
-    const { message } = req.body;
-    
-    // Security check: validate input presence, type, and length
-    if (!message || typeof message !== 'string' || message.trim().length === 0) {
-      return res.status(400).json({ reply: "System Warning: Invalid transmission payload.", text: "System Warning: Invalid transmission payload." });
-    }
-    
-    if (message.length > 1000) {
-      return res.status(400).json({ reply: "System Warning: Payload exceeds maximum limit of 1000 characters.", text: "System Warning: Payload exceeds maximum limit of 1000 characters." });
+    const clientIp = getClientIp(req);
+    const rateCheck = isRateLimited(clientIp);
+    if (rateCheck.limited) {
+      res.setHeader("Retry-After", String(rateCheck.retryAfterSec));
+      return res.status(429).json({
+        reply: `Too many requests. Please wait ${rateCheck.retryAfterSec} seconds before sending another message.`,
+        error: "Rate limit exceeded",
+      });
     }
 
-    // Check GEMINI_API_KEY first (platform standard), then fallback to GEMINI_API
-    const API_KEY = (process.env.GEMINI_API_KEY && process.env.GEMINI_API_KEY.trim())
-      || (process.env.GEMINI_API && process.env.GEMINI_API.trim())
-      || '';
+    const validation = validateChatMessage(req.body);
+    if ("error" in validation) {
+      return res.status(400).json({
+        reply: validation.error,
+        error: validation.error,
+      });
+    }
 
-    // If no valid API key is present (or if key is an invalid format like AQ. or ya29.),
-    // immediately serve the $0 built-in autonomous concierge response!
+    const cleanMessage = validation.message;
+    const API_KEY =
+      (process.env.GEMINI_API_KEY && process.env.GEMINI_API_KEY.trim()) ||
+      (process.env.GEMINI_API && process.env.GEMINI_API.trim()) ||
+      "";
+
     const isStandardApiKey = API_KEY.startsWith("AIza");
 
     if (!API_KEY || !isStandardApiKey) {
-      const fallbackResponse = getLocalConciergeResponse(message);
+      const fallbackResponse = getLocalConciergeResponse(cleanMessage);
       return res.json({ reply: fallbackResponse, text: fallbackResponse });
     }
 
@@ -104,64 +167,47 @@ async function startServer() {
         apiKey: API_KEY,
         httpOptions: {
           headers: {
-            'User-Agent': 'aistudio-build',
-          }
-        }
+            "User-Agent": "aistudio-build",
+          },
+        },
       });
 
-      // System instruction for XETA Forge AI Assistant
-      const systemInstruction = `You are 'XETA AI', the intelligent conversational AI concierge for Xeta Forge, a next-gen digital agency specializing in custom Web Development, Mobile App Development, Custom AI Model Training, AI Automation, and Chatbots.
+      const systemInstruction = `You are a friendly helper for Xeta Forge, a studio that builds Websites, Mobile Apps (iPhone & Android), Daily Task Automation, Smart Customer Chatbots, and Private Business AI Assistants.
 
-Your tone is professional, highly technical, visionary, and helpful. Use emojis like ⚡️, 🤖, 🌐, 📱, 🧠, 💼.
+Tone: warm, clear, simple everyday English so non-technical business owners understand easily. Avoid tech jargon and never invent fake stats, client numbers, or uptime claims.
 
-Xeta Forge Services:
-1. Web Development ("Next-Gen Web Development"):
-   - Building scalable, high-performance, and visually stunning web applications.
-   - Tech stack: React, Next.js, Vite, Tailwind CSS, TypeScript, Node.js, Cloud architectures.
-2. App Development ("Custom App Development"):
-   - High-performance native and cross-platform mobile apps for iOS and Android.
-   - Tech stack: React Native, Flutter, offline-first sync, biometric security, App Store & Google Play deployment.
-3. AI Model Training ("Custom AI Model Training"):
-   - Domain-specific LLM fine-tuning (LoRA, QLoRA, full-weight), dataset curation, RLHF alignment, computer vision/predictive ML models, and private cloud inference.
-4. AI Automation ("Intelligent AI Automation"):
-   - Streamlining business workflows, data pipelines, and eliminating repetitive tasks.
-   - Built using custom LLM agents, automated data pipelines, and third-party API integrations.
-5. Chatbot Development ("Conversational AI & Chatbots"):
-   - Custom-trained, context-aware AI chatbots engaging customers 24/7.
-   - Tailored to specific business databases, CRM systems, and customer support.
+Process:
+1. Listen & Plan
+2. Design & Preview
+3. Build & Test
+4. Launch & Handover (full ownership given to client)
 
-Company Name: Xeta Forge
-WhatsApp Contact: +923711889382
-Direct WhatsApp Link: [Chat on WhatsApp](https://wa.me/923711889382)
-Call to Action: Guide users to "Book a Consultation" on the site or chat directly on WhatsApp (+923711889382).
+Contact:
+- WhatsApp: +923711889382 (https://wa.me/923711889382)
+- Email: architects@xetaforge.com
+- Contact page on the website
 
-FORMATTING RULES:
-- Keep answers concise, scannable, and attractive (under 80 words).
-- Never output overwhelming, unformatted walls of text.
-- Use bold **Title** for key concepts.
-- Use clean bullet points (• or *) for lists, with each item on its own separate line.
-- When listing services, give a clean 1-line bullet for each rather than dense paragraphs.
-- Always include an encouraging call to action.`;
+Formatting:
+- Keep answers short and clear (under 85 words).
+- Use **Bold** lightly for titles and bullet points (- item) for lists.`;
 
       const response = await ai.models.generateContent({
-        model: "gemini-3.8-flash",
-        contents: message,
+        model: "gemini-2.5-flash",
+        contents: cleanMessage,
         config: {
           systemInstruction,
-        }
+        },
       });
 
-      const text = response.text || getLocalConciergeResponse(message);
+      const text = response.text || getLocalConciergeResponse(cleanMessage);
       return res.json({ reply: text, text });
     } catch (error) {
-      console.warn("Live Gemini API call failed, activating built-in concierge fallback:", error);
-      // Seamless $0 fallback: Never show error screens to users
-      const fallbackResponse = getLocalConciergeResponse(message);
+      console.warn("Gemini API call unavailable, using built-in response:", error);
+      const fallbackResponse = getLocalConciergeResponse(cleanMessage);
       return res.json({ reply: fallbackResponse, text: fallbackResponse });
     }
   });
 
-  // Vite middleware for development
   if (process.env.NODE_ENV !== "production") {
     const { createServer: createViteServer } = await import("vite");
     const vite = await createViteServer({
@@ -170,10 +216,10 @@ FORMATTING RULES:
     });
     app.use(vite.middlewares);
   } else {
-    const distPath = path.join(process.cwd(), 'dist');
+    const distPath = path.join(process.cwd(), "dist");
     app.use(express.static(distPath));
-    app.get('*all', (req, res) => {
-      res.sendFile(path.join(distPath, 'index.html'));
+    app.get("*all", (_req, res) => {
+      res.sendFile(path.join(distPath, "index.html"));
     });
   }
 

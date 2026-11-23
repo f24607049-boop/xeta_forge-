@@ -1,20 +1,85 @@
 {
-  "collections": {
-    "consultations": {
-      "fields": {
-        "name": { "type": "string" },
-        "company": { "type": "string" },
-        "email": { "type": "string" },
-        "projectType": { "type": "string" },
-        "message": { "type": "string" },
-        "createdAt": { "type": "timestamp" }
-      }
+  "entities": {
+    "Consultation": {
+      "title": "Consultation",
+      "description": "Client project consultation brief submitted from the Contact page.",
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 120,
+          "description": "Client full name."
+        },
+        "company": {
+          "type": "string",
+          "maxLength": 120,
+          "description": "Optional organization or company name."
+        },
+        "email": {
+          "type": "string",
+          "format": "email",
+          "minLength": 5,
+          "maxLength": 254,
+          "pattern": "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$",
+          "description": "Client contact email address."
+        },
+        "projectType": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 100,
+          "description": "Selected service or engagement scope."
+        },
+        "message": {
+          "type": "string",
+          "maxLength": 2000,
+          "description": "Project goals and timeline notes."
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Server-assigned submission timestamp."
+        }
+      },
+      "required": ["name", "company", "email", "projectType", "message", "createdAt"]
     },
-    "chat_sessions": {
-      "fields": {
-        "messages": { "type": "array" },
-        "updatedAt": { "type": "timestamp" }
-      }
+    "ChatSession": {
+      "title": "ChatSession",
+      "description": "Append-only chat transcript log created when interacting with the assistant.",
+      "type": "object",
+      "properties": {
+        "sessionId": {
+          "type": "string",
+          "minLength": 6,
+          "maxLength": 100,
+          "pattern": "^[a-zA-Z0-9_\\-]+$",
+          "description": "Client-generated session identifier."
+        },
+        "messages": {
+          "type": "array",
+          "description": "Bounded array of conversation turns (max 50 items)."
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Server-assigned timestamp."
+        }
+      },
+      "required": ["sessionId", "messages", "updatedAt"]
+    }
+  },
+  "firestore": {
+    "/consultations/{consultationId}": {
+      "schema": {
+        "$ref": "#/entities/Consultation"
+      },
+      "description": "Write-only intake briefs submitted by prospective clients."
+    },
+    "/chat_sessions/{docId}": {
+      "schema": {
+        "$ref": "#/entities/ChatSession"
+      },
+      "description": "Write-only append log of assistant conversations; blocked from public reading and modification."
     }
   }
 }
