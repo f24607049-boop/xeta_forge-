@@ -127,7 +127,7 @@ const ServiceModal: React.FC<ServiceModalProps> = ({
 
             <button
               onClick={() => onDiscuss(service.title)}
-              className="btn-terracotta px-6 py-3 rounded-full text-xs font-semibold tracking-wide inline-flex items-center justify-center gap-2 cursor-pointer shrink-0 whitespace-nowrap"
+              className="btn-cobalt px-6 py-3 rounded-full text-xs font-semibold tracking-wide inline-flex items-center justify-center gap-2 cursor-pointer shrink-0 whitespace-nowrap"
             >
               Ask About This Service
               <ArrowRight className="w-4 h-4" />

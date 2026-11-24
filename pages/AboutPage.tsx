@@ -16,7 +16,7 @@ interface AboutPageProps {
 const PRINCIPLES = [
   {
     icon: Compass,
-    tone: 'terracotta' as const,
+    tone: 'cobalt' as const,
     title: 'Talk Directly to the Builders',
     desc: 'You speak directly with the people designing and building your project—no confusing middlemen or complicated sales layers.',
   },
@@ -28,7 +28,7 @@ const PRINCIPLES = [
   },
   {
     icon: Lock,
-    tone: 'terracotta' as const,
+    tone: 'cobalt' as const,
     title: 'Your Information Stays Yours',
     desc: 'Any AI helper we set up sticks strictly to your approved business details and keeps your private company files safe.',
   },
@@ -69,14 +69,14 @@ const AboutPage: React.FC<AboutPageProps> = ({ onNavigate }) => {
       </div>
 
       {/* Principles */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+      <div id="about-principles" className="grid grid-cols-1 md:grid-cols-3 gap-6">
         {PRINCIPLES.map((item) => {
           const Icon = item.icon;
           return (
             <div key={item.title} className="studio-card rounded-[24px] p-6 space-y-4">
               <span
                 className={`w-10 h-10 rounded-full flex items-center justify-center text-white ${
-                  item.tone === 'sage' ? 'sage-medallion' : 'terracotta-medallion'
+                  item.tone === 'sage' ? 'sage-medallion' : 'cobalt-medallion'
                 }`}
               >
                 <Icon className="w-5 h-5" />
@@ -93,7 +93,7 @@ const AboutPage: React.FC<AboutPageProps> = ({ onNavigate }) => {
       </div>
 
       {/* Plain-English Breakdown */}
-      <div className="frosted-glass rounded-[28px] p-6 sm:p-8 space-y-6">
+      <div id="about-setup" className="frosted-glass rounded-[28px] p-6 sm:p-8 space-y-6">
         <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-3">
           <div>
             <div className="text-[11px] font-semibold tracking-[0.2em] uppercase text-[#4E6D51] mb-1">
@@ -126,9 +126,9 @@ const AboutPage: React.FC<AboutPageProps> = ({ onNavigate }) => {
       </div>
 
       {/* Consistent Rhythm Strip */}
-      <div className="studio-card rounded-[26px] p-6 sm:p-8 flex flex-col md:flex-row md:items-center justify-between gap-6">
+      <div id="about-rhythm" className="studio-card rounded-[26px] p-6 sm:p-8 flex flex-col md:flex-row md:items-center justify-between gap-6">
         <div className="space-y-1">
-          <div className="text-[11px] font-semibold uppercase tracking-[0.18em] text-[#B24E30]">
+          <div className="text-[11px] font-semibold uppercase tracking-[0.18em] text-[#155EEF]">
             Simple Way of Working
           </div>
           <h3 className="font-heading text-2xl sm:text-3xl font-semibold text-[#262A24]">
@@ -140,7 +140,7 @@ const AboutPage: React.FC<AboutPageProps> = ({ onNavigate }) => {
         </div>
         <button
           onClick={() => onNavigate('contact')}
-          className="btn-terracotta px-6 py-3.5 rounded-full text-xs font-semibold tracking-wide inline-flex items-center justify-center gap-2 shrink-0 cursor-pointer whitespace-nowrap"
+          className="btn-cobalt px-6 py-3.5 rounded-full text-xs font-semibold tracking-wide inline-flex items-center justify-center gap-2 shrink-0 cursor-pointer whitespace-nowrap"
         >
           Book a Free Chat
           <ArrowRight className="w-4 h-4" />

@@ -5,7 +5,7 @@
 
 import React, { useState } from 'react';
 import { ServiceVisualId } from '../types';
-import { Bot, Code2, Cpu, Smartphone, Workflow } from 'lucide-react';
+import { BarChart3, Bot, Code2, Cpu, Smartphone, Workflow } from 'lucide-react';
 
 interface ServiceVisualProps {
   visualId: ServiceVisualId;
@@ -16,6 +16,7 @@ interface ServiceVisualProps {
 }
 
 const FALLBACK_ICONS: Record<ServiceVisualId, React.ElementType> = {
+  data: BarChart3,
   web: Code2,
   automation: Workflow,
   chatbot: Bot,
@@ -31,15 +32,15 @@ export const ServiceVisual: React.FC<ServiceVisualProps> = ({
   eager = false,
 }) => {
   const [imgFailed, setImgFailed] = useState(false);
-  const heightClass = compact ? 'h-48 sm:h-52' : 'h-64 sm:h-72';
+  const frameClass = compact ? 'aspect-[3/2]' : 'aspect-[3/2]';
   const FallbackIcon = FALLBACK_ICONS[visualId];
 
   if (!image || imgFailed) {
     return (
       <div
-        className={`relative w-full ${heightClass} rounded-2xl overflow-hidden border border-[#4E6D51]/15 bg-[#F2EDE3] flex flex-col items-center justify-center p-6 text-center`}
+        className={`relative w-full ${frameClass} rounded-2xl overflow-hidden border border-[#4E6D51]/15 bg-[#F2EDE3] flex flex-col items-center justify-center p-6 text-center`}
       >
-        <span className="w-12 h-12 rounded-full terracotta-medallion flex items-center justify-center text-white mb-3">
+        <span className="w-12 h-12 rounded-full cobalt-medallion flex items-center justify-center text-white mb-3">
           <FallbackIcon className="w-6 h-6" />
         </span>
         <span className="text-xs font-medium text-[#4D5549]">{imageAlt}</span>
@@ -49,18 +50,18 @@ export const ServiceVisual: React.FC<ServiceVisualProps> = ({
 
   return (
     <div
-      className={`relative w-full ${heightClass} rounded-2xl overflow-hidden border border-[#4E6D51]/15 bg-[#EFE6D8]`}
+      className={`relative w-full ${frameClass} rounded-2xl overflow-hidden border border-[#4E6D51]/18 bg-[#F7F3EB]`}
     >
       <img
         src={image}
         alt={imageAlt}
-        width={800}
-        height={600}
+        width={750}
+        height={500}
         decoding="async"
         referrerPolicy="no-referrer"
         loading={eager ? 'eager' : 'lazy'}
         onError={() => setImgFailed(true)}
-        className="w-full h-full object-cover"
+        className="w-full h-full object-cover object-center"
       />
     </div>
   );

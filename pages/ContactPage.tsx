@@ -6,6 +6,7 @@
 import React, { useEffect, useState } from 'react';
 import {
   ArrowRight,
+  BarChart3,
   Bot,
   Building2,
   CheckCircle2,
@@ -27,14 +28,19 @@ interface ContactPageProps {
   initialScope?: string;
 }
 
-const SCOPE_ICONS = [Code2, Code2, Bot, Smartphone, Cpu];
+const SCOPE_ICONS = [Code2, BarChart3, Code2, Bot, Smartphone, Cpu];
 
 const SERVICE_TO_SCOPE: Record<string, string> = {
+  'Data Analysis': 'Data Analysis & Dashboards',
+  'Website Development': 'New Website or Online Portal',
+  'Web Development & Design': 'New Website or Online Portal',
   'Website Design & Building': 'New Website or Online Portal',
+  'AI & Task Automation': 'Time-Saving Automation & Chat',
   'Daily Task Automation': 'Time-Saving Automation & Chat',
   'Smart Customer Chatbots': 'Time-Saving Automation & Chat',
   'Mobile App Development': 'iPhone & Android Mobile App',
-  'Private AI Assistants': 'Private Business AI Assistant',
+  'AI Model Training': 'Custom AI Model Training',
+  'Private AI Assistants': 'Custom AI Model Training',
 };
 
 const resolveScope = (value: string): string =>
@@ -156,7 +162,7 @@ const ContactPage: React.FC<ContactPageProps> = ({
                       <h2 className="font-heading text-xl font-semibold text-[#262A24]">
                         {tier.name}
                       </h2>
-                      <div className="text-[11px] font-medium text-[#B24E30]">
+                      <div className="text-[11px] font-medium text-[#155EEF]">
                         {tier.tag}
                       </div>
                     </div>
@@ -203,7 +209,7 @@ const ContactPage: React.FC<ContactPageProps> = ({
                   href={whatsappHandoffUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="btn-terracotta w-full sm:w-auto px-6 py-3 rounded-full text-xs font-semibold tracking-wide inline-flex items-center justify-center gap-2 whitespace-nowrap"
+                  className="btn-cobalt w-full sm:w-auto px-6 py-3 rounded-full text-xs font-semibold tracking-wide inline-flex items-center justify-center gap-2 whitespace-nowrap"
                 >
                   <MessageCircle className="w-4 h-4" />
                   Message on WhatsApp ({WHATSAPP_DISPLAY})
@@ -309,7 +315,7 @@ const ContactPage: React.FC<ContactPageProps> = ({
               </div>
 
               {submissionError && (
-                <div className="p-3.5 rounded-xl bg-[#FDF2EE] border border-[#B24E30]/35 text-[#974025] text-xs leading-relaxed">
+                <div className="p-3.5 rounded-xl bg-[#EFF5FF] border border-[#155EEF]/35 text-[#0D3FA8] text-xs leading-relaxed">
                   {submissionError}
                 </div>
               )}
@@ -317,7 +323,7 @@ const ContactPage: React.FC<ContactPageProps> = ({
               <button
                 type="submit"
                 disabled={isSubmitting}
-                className="btn-terracotta w-full py-3.5 rounded-full text-sm font-semibold tracking-wide inline-flex items-center justify-center gap-2 cursor-pointer disabled:opacity-55"
+                className="btn-cobalt w-full py-3.5 rounded-full text-sm font-semibold tracking-wide inline-flex items-center justify-center gap-2 cursor-pointer disabled:opacity-55"
               >
                 {isSubmitting ? (
                   'Sending Request...'
@@ -334,14 +340,14 @@ const ContactPage: React.FC<ContactPageProps> = ({
                   href={WHATSAPP_URL}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="hover:text-[#B24E30] underline-offset-4 hover:underline"
+                  className="hover:text-[#155EEF] underline-offset-4 hover:underline"
                 >
                   WhatsApp: {WHATSAPP_DISPLAY}
                 </a>
                 <span className="hidden sm:inline text-[#262A24]/25">·</span>
                 <a
                   href={`mailto:${STUDIO_EMAIL}`}
-                  className="hover:text-[#B24E30] underline-offset-4 hover:underline"
+                  className="hover:text-[#155EEF] underline-offset-4 hover:underline"
                 >
                   {STUDIO_EMAIL}
                 </a>

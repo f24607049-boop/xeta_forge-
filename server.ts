@@ -71,11 +71,15 @@ function getLocalConciergeResponse(message: string): string {
   const lower = message.toLowerCase().trim();
 
   if (lower.match(/\b(hi|hello|hey|salam|assalam|greetings|morning|afternoon|evening|who are you|what is xeta|what are you)\b/)) {
-    return "Hello! I am the **Xeta Forge Helper**.\n\nWe build easy-to-use **Websites**, **Mobile Apps**, **Time-Saving Automations**, **Customer Chatbots**, and **Private Business AI Assistants** — all explained in plain English. How can we help?";
+    return "Hello! I am the **Xeta Forge Helper**.\n\nWe build **Data Analysis Dashboards**, **Websites**, **Mobile Apps**, **AI & Task Automation**, **Customer Chatbots**, and **AI Model Training** — all explained in plain English. How can we help?";
   }
 
   if (lower.match(/\b(service|services|offer|what do you do|capabilities|solutions|features|what you do)\b/)) {
-    return "**How We Help Your Business:**\n\n- **Website Design & Building:** Clean, fast websites and booking pages tailored to your customers.\n- **Daily Task Automation:** Connect your emails, spreadsheets, and calendars so busywork runs automatically.\n- **Smart Customer Chatbots:** Instant website and WhatsApp answers trained strictly on your business FAQs.\n- **Mobile App Development:** Smooth apps for both iPhone and Android.\n- **Private AI Assistants:** Helpers trained privately on your company guides and tone.\n\nWhich one sounds closest to what you need?";
+    return "**How We Help Your Business:**\n\n- **Data Analysis:** Clean spreadsheets, clear visual charts, and weekly summaries.\n- **Website Development:** Clean, fast websites, portals, and booking pages tailored to your customers.\n- **AI & Task Automation:** Connect smart AI decisions with automatic daily workflows.\n- **Smart Customer Chatbots:** Instant website and WhatsApp answers trained strictly on your business FAQs.\n- **Mobile App Development:** Smooth apps for both iPhone and Android.\n- **AI Model Training:** Custom-trained AI models tuned on your own examples, catalogs, and tone.\n\nWhich one sounds closest to what you need?";
+  }
+
+  if (lower.match(/\b(data|analysis|analytics|dashboard|dashboards|report|reports|spreadsheet|spreadsheets|excel|csv|insights|metrics)\b/)) {
+    return "**Data Analysis:**\n\n- Cleans and organizes scattered spreadsheets, orders, and customer records.\n- Turns raw business numbers into clear visual charts and easy-to-read dashboards.\n- Sends helpful weekly summaries without manual copy-and-paste.\n\nMessage us on the **Contact** page anytime to discuss your reports.";
   }
 
   if (lower.match(/\b(mobile|ios|android|flutter|react native|native app|mobile app|app development|smartphone|play store|app store|iphone)\b/)) {
@@ -83,15 +87,15 @@ function getLocalConciergeResponse(message: string): string {
   }
 
   if (lower.match(/\b(model training|train|training|fine-tuning|fine tuning|finetune|lora|qlora|rlhf|dataset|datasets|weights|neural|machine learning|ml model|custom model|private ai|helper)\b/)) {
-    return "**Private AI Assistants:**\n\n- Trained around your own company documents, pricing guides, and brand voice.\n- Tested carefully so answers stay helpful and accurate.\n- Kept private for your business alone.\n\nMessage us on the **Contact** page or WhatsApp to share what you have in mind.";
+    return "**AI Model Training:**\n\n- Organized training examples prepared directly from your company documents and product catalogs.\n- Tuned carefully to match your exact industry terms, workflows, and brand tone.\n- Tested thoroughly and kept private for your business alone.\n\nMessage us on the **Contact** page or WhatsApp to share what you want to train.";
   }
 
   if (lower.match(/\b(web|website|frontend|backend|react|next|fullstack|development|developer|design|stack|tech)\b/)) {
-    return "**Website Design & Building:**\n\n- Fast, modern websites built cleanly for phones, tablets, and computers.\n- Easy-to-use forms, booking pages, and clear layouts.\n- You receive full ownership of your website and files.\n\nClick **Book a Free Chat** anytime on the Contact page.";
+    return "**Website Development:**\n\n- Fast, modern websites and custom portals built cleanly for phones, tablets, and desktop screens.\n- Easy-to-use forms, booking pages, and clear layouts.\n- You receive full ownership of your website and files.\n\nClick **Book a Free Chat** anytime on the Contact page.";
   }
 
   if (lower.match(/\b(automation|automate|workflow|pipeline|pipelines|agents|orchestration|repetitive|tasks|sync|busywork|save time)\b/)) {
-    return "**Daily Task Automation:**\n\n- Links your everyday forms, emails, calendars, and billing tools together.\n- Reduces manual copying and lets your team focus on customers instead of spreadsheets.\n\nTell us which daily chore takes too much time!";
+    return "**AI & Task Automation:**\n\n- Combines smart AI reading with steady automatic workflows across your forms, emails, and billing tools.\n- Reduces manual copying and lets your team focus on customers instead of spreadsheets.\n\nTell us which daily chore takes too much time!";
   }
 
   if (lower.match(/\b(chatbot|chatbots|bot|bots|conversational|support|customer service|assistant|assistants|nlp)\b/)) {
@@ -99,7 +103,7 @@ function getLocalConciergeResponse(message: string): string {
   }
 
   if (lower.match(/\b(price|pricing|cost|costs|rate|rates|quote|package|packages|budget|plan|plans|fee|fees|how much|dollar|dollars|\$)\b/)) {
-    return "**Simple Ways to Work Together:**\n\n1. **Free Discovery Call:** A friendly chat to hear your goals and recommend the simplest setup.\n2. **Website or App Build:** Clear fixed steps with previews along the way.\n3. **Automation & Chatbots:** Tailored to the tools your team uses every day.\n\nClick **Book a Free Chat** or message us on WhatsApp (https://wa.me/923711889382) for a clear quote.";
+    return "**Simple Ways to Work Together:**\n\n1. **Free Discovery Call:** A friendly chat to hear your goals and recommend the simplest setup.\n2. **Data, Website or App Build:** Clear fixed steps with previews along the way.\n3. **Automation & Model Training:** Tailored to your tools and company examples.\n\nClick **Book a Free Chat** or message us on WhatsApp (https://wa.me/923711889382) for a clear quote.";
   }
 
   if (lower.match(/\b(process|timeline|how long|how it works|steps|methodology|duration|delivery|turnaround|speed)\b/)) {
@@ -107,14 +111,14 @@ function getLocalConciergeResponse(message: string): string {
   }
 
   if (lower.match(/\b(contact|talk|call|meeting|consultation|book|whatsapp|email|hire|reach|phone|schedule)\b/)) {
-    return "**Talk With Xeta Forge:**\n\n- **WhatsApp:** https://wa.me/923711889382\n- **Contact Form:** Visit our **Contact** page to tell us about your project\n- **Email:** architects@xetaforge.com\n\nWe reply within one business day.";
+    return "**Talk With Xeta Forge:**\n\n- **WhatsApp:** https://wa.me/923711889382\n- **Contact Form:** Visit our **Contact** page to tell us about your project\n- **Email:** xetaforge@gmail.com\n\nWe reply within one business day.";
   }
 
   if (lower.match(/\b(about|who|team|company|experience|location|portfolio|agency|clients|guarantee)\b/)) {
-    return "**About Xeta Forge:**\n\nWe build websites, mobile apps, and time-saving AI tools in plain everyday English—with full ownership handed directly to your business at launch.";
+    return "**About Xeta Forge:**\n\nWe build **Data Analysis Dashboards**, **Websites**, **Mobile Apps**, and **time-saving AI tools** in plain everyday English—with full ownership handed directly to your business at launch.";
   }
 
-  return "I can answer questions in plain English about **Websites**, **Mobile Apps**, **Daily Task Automation**, **Customer Chatbots**, **Private AI Assistants**, or getting a quote.\n\nYou can also message our team directly on WhatsApp: https://wa.me/923711889382";
+  return "I can answer questions in plain English about **Data Analysis**, **Website Development**, **Mobile Apps**, **AI & Task Automation**, **Customer Chatbots**, **AI Model Training**, or getting a quote.\n\nYou can also message our team directly on WhatsApp: https://wa.me/923711889382";
 }
 
 async function startServer() {
@@ -172,7 +176,7 @@ async function startServer() {
         },
       });
 
-      const systemInstruction = `You are a friendly helper for Xeta Forge, a studio that builds Websites, Mobile Apps (iPhone & Android), Daily Task Automation, Smart Customer Chatbots, and Private Business AI Assistants.
+      const systemInstruction = `You are a friendly helper for Xeta Forge, a studio that builds Data Analysis Dashboards, Website Development, Mobile Apps (iPhone & Android), AI & Task Automation, Smart Customer Chatbots, and Custom AI Model Training.
 
 Tone: warm, clear, simple everyday English so non-technical business owners understand easily. Avoid tech jargon and never invent fake stats, client numbers, or uptime claims.
 
@@ -184,7 +188,7 @@ Process:
 
 Contact:
 - WhatsApp: +923711889382 (https://wa.me/923711889382)
-- Email: architects@xetaforge.com
+- Email: xetaforge@gmail.com
 - Contact page on the website
 
 Formatting:

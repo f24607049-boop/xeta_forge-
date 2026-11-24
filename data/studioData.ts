@@ -4,49 +4,68 @@
  */
 
 import { EngagementScope, ProcessStep, Service } from '../types';
-import websiteImg from '../src/assets/images/service_website_building_1795462495585.webp';
-import automationImg from '../src/assets/images/service_workflow_automation_1795462496490.webp';
-import chatbotImg from '../src/assets/images/service_customer_chatbots_1795462496980.webp';
-import mobileImg from '../src/assets/images/service_mobile_apps_1795462498379.webp';
-import customAiImg from '../src/assets/images/service_custom_ai_1795462496866.webp';
+import dataAnalysisImg from '../src/assets/images/service_data_analysis_1795513141951.jpg';
+import websiteImg from '../src/assets/images/website_dev_recolor_1795465624878.webp';
+import automationImg from '../src/assets/images/automation_studio_recolor_1795465321341.webp';
+import chatbotImg from '../src/assets/images/studio_chat_assistant_1795464744975.webp';
+import mobileImg from '../src/assets/images/studio_mobile_apps_1795464744880.webp';
+import customAiImg from '../src/assets/images/ai_training_recolor_1795465838222.webp';
 
 export const WHATSAPP_URL = 'https://wa.me/923711889382';
 export const WHATSAPP_DISPLAY = '+92 371 1889382';
-export const STUDIO_EMAIL = 'architects@xetaforge.com';
+export const STUDIO_EMAIL = 'xetaforge@gmail.com';
 
 export const SERVICES: Service[] = [
+  {
+    id: 'data-analysis',
+    visualId: 'data',
+    image: dataAnalysisImg,
+    imageAlt: 'Sunlit studio monitor showing clear business data analysis bar charts, trend lines, and pie graphs on a cream stone desk',
+    title: 'Data Analysis',
+    category: 'Clear Reports & Insights',
+    outcome: 'Turn messy spreadsheets and business numbers into easy-to-read dashboards and decisions.',
+    description:
+      'Stop guessing from scattered spreadsheets. We clean up your sales, customer, and operations numbers and organize them into clear visual reports so you can see what is working at a glance.',
+    deliverable: 'Interactive analytics dashboard and clean reporting setup',
+    features: [
+      'Cleans and organizes spreadsheets, orders, and customer records',
+      'Turns raw numbers into clear visual charts and daily summaries',
+      'Highlights trends, top-selling areas, and slow spots early',
+      'Automated weekly summaries without manual copy-and-paste',
+    ],
+  },
   {
     id: 'web-dev',
     visualId: 'web',
     image: websiteImg,
-    imageAlt: 'A modern website displayed on a laptop resting on a warm sunlit oak desk',
-    title: 'Website Design & Building',
-    category: 'Websites & Online Tools',
-    outcome: 'A clear, fast website built around your visitors and business goals.',
+    imageAlt: 'Studio desktop monitor showing clean website code, charts, and interface layouts in sage green and cobalt blue tones',
+    title: 'Website Development',
+    category: 'Custom Websites & Portals',
+    outcome: 'Fast, reliable websites and customer portals built cleanly around your business goals.',
     description:
-      'We design and build clean websites, customer portals, and booking pages that look great on every phone and computer—and belong completely to you.',
-    deliverable: 'Complete website, launch setup, and clear guide',
+      'We build complete websites, booking pages, and custom online portals from the ground up—loading quickly on every screen, simple to manage, and owned completely by you.',
+    deliverable: 'Full custom website, speed setup, and owner guide',
     features: [
-      'Loads quickly on phones, tablets, and laptops',
-      'Custom look tailored to your brand and customers',
-      'Simple contact forms, booking pages, and product showcases',
-      'You keep full ownership of your website and all files',
+      'Clean layouts mapped around how your customers browse and book',
+      'Loads smoothly across phones, tablets, and desktop monitors',
+      'Built-in contact forms, customer portals, and clear dashboards',
+      'You keep full ownership of your website, domain, and files',
     ],
   },
   {
     id: 'ai-automation',
     visualId: 'automation',
     image: automationImg,
-    imageAlt: 'A calm office monitor and tablet showing automated daily tasks and order steps',
-    title: 'Daily Task Automation',
-    category: 'Save Time on Busywork',
-    outcome: 'Connect your everyday tools so repetitive office work runs automatically.',
+    imageAlt: 'Split visual pairing sage green AI thinking with precision automation gears',
+    title: 'AI & Task Automation',
+    category: 'Smart Thinking + Automatic Work',
+    outcome: 'Combine smart AI understanding with steady automatic workflows that run on their own.',
     description:
-      'Stop copying details by hand between emails, spreadsheets, calendars, and invoices. We link your apps together so inquiries, orders, and updates flow smoothly.',
-    deliverable: 'Connected business tools with simple team alerts',
+      'Bring smart AI reading together with reliable step-by-step automation so customer inquiries, emails, spreadsheets, and invoices get sorted and updated without manual typing.',
+    deliverable: 'Connected AI and daily workflow automation',
     features: [
-      'Send new website leads straight to your email or team chat',
-      'Read incoming forms and invoices without manual typing',
+      'Reads incoming forms, messages, and invoices without manual typing',
+      'Routes new website leads straight to your email or team chat',
       'Optional quick approval steps before important emails go out',
       'Clear notifications if anything ever needs a human review',
     ],
@@ -55,7 +74,7 @@ export const SERVICES: Service[] = [
     id: 'ai-chatbots',
     visualId: 'chatbot',
     image: chatbotImg,
-    imageAlt: 'A business owner smiling while reading helpful customer messages on a smartphone',
+    imageAlt: 'Smartphone on a frosted glass stand showing sage green and blue chat bubbles in soft morning sunlight',
     title: 'Smart Customer Chatbots',
     category: '24/7 Customer Help',
     outcome: 'Give visitors instant, helpful answers on your website and WhatsApp.',
@@ -73,7 +92,7 @@ export const SERVICES: Service[] = [
     id: 'app-dev',
     visualId: 'mobile',
     image: mobileImg,
-    imageAlt: 'Two smartphones on warm stone displaying clean, friendly mobile app screens',
+    imageAlt: 'Two sleek mobile phones floating above stacked cream and sage fluted plinths showing clean app interfaces',
     title: 'Mobile App Development',
     category: 'iPhone & Android',
     outcome: 'One smooth mobile app for your customers across iPhone and Android.',
@@ -91,18 +110,18 @@ export const SERVICES: Service[] = [
     id: 'ai-training',
     visualId: 'training',
     image: customAiImg,
-    imageAlt: 'A digital tablet and neatly organized cream notebooks on a sunlit travertine table',
-    title: 'Private AI Assistants',
-    category: 'Tailored Company Knowledge',
-    outcome: 'A private helper trained on your own business guides, tone, and files.',
+    imageAlt: 'Cream ceramic humanoid robot studying glowing cream, sage green, and warm mathematical models on a dark olive board',
+    title: 'AI Model Training',
+    category: 'Custom Trained Models',
+    outcome: 'Teach an AI model your own business examples, rules, and style so it works accurately for you.',
     description:
-      'Give your staff a private digital helper that understands your company policies, product details, and writing style—kept secure for your business alone.',
-    deliverable: 'Your private business assistant with accuracy checks',
+      'We train and fine-tune dedicated AI models on your company examples, product catalogs, and real-world workflows—tested carefully so answers stay consistent and accurate.',
+    deliverable: 'Custom-trained AI model with accuracy checks',
     features: [
-      'Organized around your own company documents and handbooks',
-      'Writes clearly in your brand voice and everyday wording',
-      'Tested carefully to keep answers accurate and dependable',
-      'Kept private so your company information stays yours',
+      'Organized training examples built cleanly from your business files',
+      'Tuned to match your exact industry terms, tasks, and writing tone',
+      'Checked carefully against real questions to keep results reliable',
+      'Private setup so your training data and model belong solely to you',
     ],
   },
 ];
@@ -150,6 +169,12 @@ export const ENGAGEMENT_SCOPES: EngagementScope[] = [
       'A relaxed chat about your ideas, current website or tools, and the simplest path forward.',
   },
   {
+    name: 'Data Analysis & Dashboards',
+    tag: 'Clear Insights',
+    description:
+      'Organize business spreadsheets and sales records into clear visual charts and reports.',
+  },
+  {
     name: 'New Website or Online Portal',
     tag: 'Design & Launch',
     description:
@@ -168,9 +193,9 @@ export const ENGAGEMENT_SCOPES: EngagementScope[] = [
       'A smooth mobile app built for both iPhone and Android with app store setup included.',
   },
   {
-    name: 'Private Business AI Assistant',
-    tag: 'Your Company Knowledge',
+    name: 'Custom AI Model Training',
+    tag: 'Trained on Your Data',
     description:
-      'A private AI helper trained on your team guides, manuals, and business tone.',
+      'Teach a dedicated AI model your business examples, product details, and tone for accurate results.',
   },
 ];

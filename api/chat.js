@@ -28,24 +28,24 @@ function getConciergeFallback(message) {
   const lower = (message || '').toLowerCase().trim();
 
   if (lower.match(/\b(hi|hello|hey|salam|assalam|greetings|morning|afternoon|evening|who are you|what is xeta|what are you)\b/)) {
-    return "Hello. I am the **Xeta Forge Assistant**.\n\nWe build custom **Web Applications**, **Mobile Apps**, **Workflow & AI Automation**, **Conversational Support Agents**, and **Fine-Tuned Language Models**. How can we help with your project?";
+    return "Hello. I am the **Xeta Forge Assistant**.\n\nWe build **Data Analysis Dashboards**, **Website Development**, **Mobile Apps**, **AI & Task Automation**, **Smart Customer Chatbots**, and **AI Model Training**. How can we help with your project?";
   }
 
   if (lower.match(/\b(service|services|offer|what do you do|capabilities|solutions|features)\b/)) {
-    return "**Core Capabilities at Xeta Forge:**\n\n- **Web Application Engineering:** React, Next.js, and TypeScript builds.\n- **Workflow & AI Automation:** Connect CRMs, documents, and internal APIs.\n- **Conversational Support Agents:** Grounded in your documentation.\n- **Mobile & Cross-Platform Apps:** Unified iOS and Android builds.\n- **Custom Model Fine-Tuning:** Domain datasets and private deployment.";
+    return "**Core Capabilities at Xeta Forge:**\n\n- **Data Analysis:** Clear business dashboards and clean spreadsheet reporting.\n- **Website Development:** Custom websites, portals, and booking pages.\n- **AI & Task Automation:** Connect emails, forms, and daily office tasks.\n- **Smart Customer Chatbots:** Instant website and WhatsApp answers grounded in your FAQs.\n- **Mobile App Development:** Unified iPhone and Android builds.\n- **AI Model Training:** Custom-trained models on your company examples and tone.";
   }
 
   if (lower.match(/\b(contact|talk|call|meeting|consultation|book|whatsapp|email|hire|reach|phone)\b/)) {
-    return "**Connect with Xeta Forge:**\n\n- **WhatsApp:** https://wa.me/923711889382\n- **Email:** architects@xetaforge.com\n- **Consultation Form:** Open the **Contact** page to submit your project brief.";
+    return "**Connect with Xeta Forge:**\n\n- **WhatsApp:** https://wa.me/923711889382\n- **Email:** xetaforge@gmail.com\n- **Consultation Form:** Open the **Contact** page to submit your project brief.";
   }
 
-  return "Ask me about **Web Application Engineering**, **Mobile Apps**, **Workflow & AI Automation**, **Conversational Agents**, or **Custom Model Fine-Tuning**.\n\nDirect WhatsApp: https://wa.me/923711889382";
+  return "Ask me about **Data Analysis**, **Website Development**, **Mobile Apps**, **AI & Task Automation**, **Customer Chatbots**, or **AI Model Training**.\n\nDirect WhatsApp: https://wa.me/923711889382";
 }
 
-const SYSTEM_INSTRUCTION = `You are the assistant for Xeta Forge, a software engineering studio specializing in Web Application Engineering, Mobile Apps, Workflow & AI Automation, Conversational Support Agents, and Custom Model Fine-Tuning.
+const SYSTEM_INSTRUCTION = `You are the assistant for Xeta Forge, a software studio specializing in Data Analysis, Website Development, Mobile Apps, AI & Task Automation, Smart Customer Chatbots, and AI Model Training.
 
 Keep replies concise (under 90 words), grounded, and never invent client counts or unverified metrics.
-WhatsApp: https://wa.me/923711889382 | Email: architects@xetaforge.com`;
+WhatsApp: https://wa.me/923711889382 | Email: xetaforge@gmail.com`;
 
 export default async function handler(req, res) {
   res.setHeader('X-Content-Type-Options', 'nosniff');

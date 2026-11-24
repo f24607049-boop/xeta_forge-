@@ -3,18 +3,27 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { ArrowRight, CheckCircle2, FileCheck2, ShieldCheck } from 'lucide-react';
 import { PageId } from '../types';
 import { PROCESS_STEPS } from '../data/studioData';
 
 interface ProcessPageProps {
   onNavigate: (page: PageId) => void;
+  initialStepIndex?: number;
 }
 
-const ProcessPage: React.FC<ProcessPageProps> = ({ onNavigate }) => {
-  const [activeIndex, setActiveIndex] = useState(0);
-  const activeStep = PROCESS_STEPS[activeIndex];
+const ProcessPage: React.FC<ProcessPageProps> = ({
+  onNavigate,
+  initialStepIndex = 0,
+}) => {
+  const [activeIndex, setActiveIndex] = useState(initialStepIndex);
+
+  useEffect(() => {
+    setActiveIndex(initialStepIndex);
+  }, [initialStepIndex]);
+
+  const activeStep = PROCESS_STEPS[activeIndex] ?? PROCESS_STEPS[0];
 
   return (
     <section className="pt-28 sm:pt-36 pb-20 px-4 sm:px-6 max-w-7xl mx-auto w-full space-y-10">
@@ -52,7 +61,7 @@ const ProcessPage: React.FC<ProcessPageProps> = ({ onNavigate }) => {
               >
                 <div className="flex items-start justify-between gap-3">
                   <div>
-                    <div className="font-mono text-[11px] font-semibold text-[#B24E30] mb-1">
+                    <div className="font-mono text-[11px] font-semibold text-[#155EEF] mb-1">
                       STEP {item.step}
                     </div>
                     <h2 className="font-heading text-2xl font-semibold text-[#262A24]">
@@ -94,7 +103,7 @@ const ProcessPage: React.FC<ProcessPageProps> = ({ onNavigate }) => {
                     onClick={() => setActiveIndex(idx)}
                     className={`rounded-xl py-2.5 px-2 text-center border transition-all cursor-pointer ${
                       active
-                        ? 'bg-[#A6482C] border-[#A6482C] text-white'
+                        ? 'bg-[#1250D2] border-[#1250D2] text-white'
                         : completed
                           ? 'bg-[#D7E3D4] border-[#4E6D51]/35 text-[#262A24]'
                           : 'bg-white/90 border-[#262A24]/10 text-[#4D5549]'
@@ -144,7 +153,7 @@ const ProcessPage: React.FC<ProcessPageProps> = ({ onNavigate }) => {
             </span>
             <button
               onClick={() => onNavigate('contact')}
-              className="btn-terracotta px-6 py-3 rounded-full text-xs font-semibold tracking-wide inline-flex items-center justify-center gap-2 cursor-pointer whitespace-nowrap"
+              className="btn-cobalt px-6 py-3 rounded-full text-xs font-semibold tracking-wide inline-flex items-center justify-center gap-2 cursor-pointer whitespace-nowrap"
             >
               Book a Free Chat
               <ArrowRight className="w-4 h-4" />
@@ -154,7 +163,7 @@ const ProcessPage: React.FC<ProcessPageProps> = ({ onNavigate }) => {
       </div>
 
       {/* Plain-English Promises */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div id="process-promises" className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <div className="studio-card rounded-[24px] p-6 flex items-start gap-4">
           <span className="w-10 h-10 rounded-full sage-medallion flex items-center justify-center text-white shrink-0">
             <ShieldCheck className="w-5 h-5" />
@@ -171,7 +180,7 @@ const ProcessPage: React.FC<ProcessPageProps> = ({ onNavigate }) => {
         </div>
 
         <div className="studio-card rounded-[24px] p-6 flex items-start gap-4">
-          <span className="w-10 h-10 rounded-full terracotta-medallion flex items-center justify-center text-white shrink-0">
+          <span className="w-10 h-10 rounded-full cobalt-medallion flex items-center justify-center text-white shrink-0">
             <FileCheck2 className="w-5 h-5" />
           </span>
           <div>

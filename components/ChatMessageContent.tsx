@@ -81,7 +81,7 @@ export const ChatMessageContent: React.FC<ChatMessageContentProps> = ({
           return (
             <div
               key={`h-${index}`}
-              className="pt-1 font-sans text-xs font-semibold uppercase tracking-wider text-[#B24E30]"
+              className="pt-1 font-sans text-xs font-semibold uppercase tracking-wider text-[#155EEF]"
             >
               {renderInlineFormatting(clean, `hi-${index}`)}
             </div>

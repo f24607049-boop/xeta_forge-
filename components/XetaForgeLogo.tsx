@@ -10,49 +10,25 @@ interface XetaForgeLogoProps {
   className?: string;
 }
 
+export const LOGO_IMAGE_SRC =
+  '/assets/aistudio/WhatsApp_Image_2026-11-24_at_1.44.08_PM_8a501e78.jpeg';
+
 export const XetaForgeEmblem: React.FC<{ className?: string }> = ({
   className = 'w-9 h-9',
 }) => (
-  <svg
-    viewBox="0 0 64 64"
-    fill="none"
-    xmlns="http://www.w3.org/2000/svg"
-    className={className}
-    aria-hidden="true"
+  <span
+    className={`inline-flex items-center justify-center rounded-full overflow-hidden bg-[#0A101E] ring-1 ring-[#155EEF]/45 shadow-[0_2px_10px_-2px_rgba(21,94,239,0.45)] ${className}`}
   >
-    <circle
-      cx="32"
-      cy="32"
-      r="30"
-      fill="#FBF7F0"
-      stroke="rgba(78, 109, 81, 0.28)"
-      strokeWidth="1.5"
+    <img
+      src={LOGO_IMAGE_SRC}
+      alt="Xeta Forge Logo"
+      width={64}
+      height={64}
+      decoding="async"
+      referrerPolicy="no-referrer"
+      className="w-full h-full object-cover object-center scale-[1.12]"
     />
-    <path
-      d="M19 21L30 32L19 43"
-      stroke="#262A24"
-      strokeWidth="2.6"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    />
-    <path
-      d="M34 43L23 32L34 21H45"
-      stroke="#4E6D51"
-      strokeWidth="2.6"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    />
-    <path
-      d="M33 32H43"
-      stroke="#B24E30"
-      strokeWidth="2.6"
-      strokeLinecap="round"
-    />
-    <path
-      d="M46 16L47.1 18.9L50 20L47.1 21.1L46 24L44.9 21.1L42 20L44.9 18.9L46 16Z"
-      fill="#B24E30"
-    />
-  </svg>
+  </span>
 );
 
 export const XetaForgeLogo: React.FC<XetaForgeLogoProps> = ({
@@ -66,7 +42,7 @@ export const XetaForgeLogo: React.FC<XetaForgeLogoProps> = ({
   if (variant === 'card') {
     return (
       <div className={`inline-flex items-center gap-3.5 ${className}`}>
-        <XetaForgeEmblem className="w-12 h-12 shrink-0 shadow-xs rounded-full" />
+        <XetaForgeEmblem className="w-12 h-12 shrink-0" />
         <div className="flex flex-col text-left">
           <span className="font-sans text-xs font-semibold tracking-[0.2em] text-[#262A24] uppercase">
             XETA FORGE
@@ -84,7 +60,7 @@ export const XetaForgeLogo: React.FC<XetaForgeLogoProps> = ({
   if (variant === 'about') {
     return (
       <div className={`inline-flex flex-col items-center gap-2 ${className}`}>
-        <XetaForgeEmblem className="w-14 h-14 shadow-xs rounded-full" />
+        <XetaForgeEmblem className="w-16 h-16" />
       </div>
     );
   }
@@ -92,7 +68,7 @@ export const XetaForgeLogo: React.FC<XetaForgeLogoProps> = ({
   if (variant === 'footer') {
     return (
       <div className={`inline-flex items-center gap-3 ${className}`}>
-        <XetaForgeEmblem className="w-9 h-9 shrink-0 rounded-full" />
+        <XetaForgeEmblem className="w-10 h-10 shrink-0" />
         <div className="flex flex-col text-left">
           <span className="font-sans text-sm font-semibold tracking-[0.16em] text-[#262A24] uppercase">
             XETA FORGE
@@ -107,7 +83,7 @@ export const XetaForgeLogo: React.FC<XetaForgeLogoProps> = ({
 
   return (
     <div className={`inline-flex items-center gap-2.5 group whitespace-nowrap shrink-0 ${className}`}>
-      <XetaForgeEmblem className="w-8 h-8 shrink-0 rounded-full transition-transform duration-200 group-hover:scale-105" />
+      <XetaForgeEmblem className="w-9 h-9 shrink-0 transition-transform duration-200 group-hover:scale-105" />
       <span className="font-sans text-sm font-semibold tracking-[0.16em] text-[#262A24] uppercase">
         XETA FORGE
       </span>

@@ -12,10 +12,10 @@ import ChatMessageContent from './ChatMessageContent';
 
 const SUGGESTED_PROMPTS = [
   { label: 'What You Build', prompt: 'What services does Xeta Forge offer?' },
-  { label: 'Websites', prompt: 'Tell me about your Website Design and Building service.' },
-  { label: 'Mobile Apps', prompt: 'Can you build a mobile app for iPhone and Android?' },
-  { label: 'Save Time', prompt: 'How can you automate daily repetitive tasks for my business?' },
-  { label: 'How It Works', prompt: 'How does your four-step process work?' },
+  { label: 'Data Analysis', prompt: 'How does your Data Analysis service help my business?' },
+  { label: 'Website Development', prompt: 'Tell me about your Website Development service.' },
+  { label: 'AI & Automation', prompt: 'How do AI and task automation work together for my business?' },
+  { label: 'AI Model Training', prompt: 'How does your AI Model Training service work?' },
   { label: 'WhatsApp', prompt: 'How can I contact Xeta Forge on WhatsApp?' },
 ];
 
@@ -140,7 +140,7 @@ const AIChat: React.FC<AIChatProps> = ({ defaultOpen = true }) => {
                 key={item.label}
                 onClick={() => sendMessageText(item.prompt)}
                 disabled={isLoading}
-                className="shrink-0 px-2.5 py-1 rounded-full text-[11px] font-medium bg-white/90 hover:bg-white border border-[#4E6D51]/25 hover:border-[#B24E30]/45 text-[#262A24] transition-colors cursor-pointer disabled:opacity-50 whitespace-nowrap"
+                className="shrink-0 px-2.5 py-1 rounded-full text-[11px] font-medium bg-white/90 hover:bg-white border border-[#4E6D51]/25 hover:border-[#155EEF]/45 text-[#262A24] transition-colors cursor-pointer disabled:opacity-50 whitespace-nowrap"
               >
                 {item.label}
               </button>
@@ -161,7 +161,7 @@ const AIChat: React.FC<AIChatProps> = ({ defaultOpen = true }) => {
                 <div
                   className={`max-w-[88%] rounded-2xl px-3.5 py-2.5 text-[13px] leading-relaxed ${
                     msg.role === 'user'
-                      ? 'bg-[#A6482C] text-white rounded-br-sm shadow-xs'
+                      ? 'bg-[#1250D2] text-white rounded-br-sm shadow-xs'
                       : 'bg-white/95 text-[#262A24] border border-[#4E6D51]/15 rounded-bl-sm shadow-xs'
                   }`}
                 >
@@ -196,7 +196,7 @@ const AIChat: React.FC<AIChatProps> = ({ defaultOpen = true }) => {
             <button
               onClick={handleSend}
               disabled={!input.trim() || isLoading}
-              className="w-9 h-9 rounded-full btn-terracotta flex items-center justify-center disabled:opacity-45 disabled:cursor-not-allowed cursor-pointer shrink-0"
+              className="w-9 h-9 rounded-full btn-cobalt flex items-center justify-center disabled:opacity-45 disabled:cursor-not-allowed cursor-pointer shrink-0"
               aria-label="Send message"
             >
               <Send className="w-4 h-4" />
@@ -207,7 +207,7 @@ const AIChat: React.FC<AIChatProps> = ({ defaultOpen = true }) => {
 
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="w-13 h-13 rounded-full btn-terracotta flex items-center justify-center cursor-pointer"
+        className="w-13 h-13 rounded-full btn-cobalt flex items-center justify-center cursor-pointer"
         aria-label={isOpen ? 'Close Assistant' : 'Open Assistant'}
       >
         {isOpen ? (

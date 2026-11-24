@@ -10,8 +10,8 @@
   --color-sage-wash: #E9EFE6;
   --color-sage: #4E6D51;
   --color-sage-dark: #3B553E;
-  --color-terracotta: #B24E30;
-  --color-terracotta-dark: #974025;
+  --color-cobalt: #155EEF;
+  --color-cobalt-dark: #0D3FA8;
   --color-ink: #262A24;
   --color-ink-muted: #4D5549;
 }
@@ -39,79 +39,140 @@
   }
 }
 
-/* Lightweight Warm Cream Canvas (single gradient, zero scroll repaint overhead) */
+/* Warm Cream Canvas with Soft Sage & Cobalt Blue Wash (single linear pass, fast paint) */
 .bg-sunlit-studio {
   background-color: #FBF7F0;
-  background-image: linear-gradient(180deg, #FDFBF7 0%, #F5EEE2 100%);
+  background-image: linear-gradient(135deg, #FDFBF7 0%, #EDF2EA 52%, #E8F0FC 100%);
 }
 
-/* Crisp Tactile Cream Container (zero backdrop-filter GPU blur overhead) */
+/* Lightweight Glassomorphic Hero, Nav & Feature Panels (8px fast blur, no heavy filter chain) */
 .frosted-glass {
-  background-color: #FDFBF7;
-  border: 1px solid rgba(78, 109, 81, 0.18);
-  box-shadow: 0 10px 28px -12px rgba(38, 42, 36, 0.08);
+  background: linear-gradient(
+    145deg,
+    rgba(255, 254, 250, 0.78) 0%,
+    rgba(244, 238, 228, 0.58) 100%
+  );
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.85);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.92),
+    0 12px 30px -12px rgba(38, 42, 36, 0.12);
+  transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1),
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
 }
 
-/* Fast Lightweight Card */
+/* Glassomorphic Flashcards with Smooth GPU Hover Transition */
 .studio-card {
-  background-color: #FFFDF9;
-  border: 1px solid rgba(38, 42, 36, 0.11);
-  box-shadow: 0 4px 14px -8px rgba(38, 42, 36, 0.08);
-  transition: border-color 0.16s ease, box-shadow 0.16s ease;
+  background: linear-gradient(
+    145deg,
+    rgba(255, 254, 250, 0.76) 0%,
+    rgba(238, 243, 235, 0.54) 100%
+  );
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.86);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.95),
+    0 8px 22px -10px rgba(38, 42, 36, 0.11);
+  transition: transform 0.22s cubic-bezier(0.16, 1, 0.3, 1),
+    border-color 0.22s ease,
+    box-shadow 0.22s ease,
+    background-color 0.22s ease;
+  will-change: transform;
 }
 
 .studio-card:hover {
-  border-color: rgba(178, 78, 48, 0.36);
-  box-shadow: 0 8px 20px -10px rgba(78, 109, 81, 0.16);
+  transform: translateY(-5px);
+  background: linear-gradient(
+    145deg,
+    rgba(255, 255, 253, 0.88) 0%,
+    rgba(232, 240, 252, 0.72) 100%
+  );
+  border-color: rgba(21, 94, 239, 0.38);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 1),
+    0 18px 34px -12px rgba(21, 94, 239, 0.22);
 }
 
-/* Subtle Sage Inner Chip */
+/* Glass Inner Chip with Hover Lift */
 .studio-chip {
-  background-color: #EEF2EC;
-  border: 1px solid rgba(78, 109, 81, 0.18);
+  background: rgba(255, 254, 250, 0.65);
+  border: 1px solid rgba(255, 255, 255, 0.82);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.9),
+    0 4px 12px -6px rgba(38, 42, 36, 0.08);
+  transition: transform 0.18s cubic-bezier(0.16, 1, 0.3, 1),
+    border-color 0.18s ease,
+    background-color 0.18s ease;
 }
 
-/* Terracotta Circular Icon Medallion */
-.terracotta-medallion {
-  background-color: #B24E30;
+.studio-chip:hover {
+  transform: translateY(-2px);
+  background: rgba(255, 255, 253, 0.84);
+}
+
+/* Cobalt Blue Circular Icon Medallion */
+.cobalt-medallion {
+  background-color: #155EEF;
+  box-shadow: 0 4px 10px -3px rgba(21, 94, 239, 0.42);
 }
 
 /* Sage Green Circular Icon Medallion */
 .sage-medallion {
   background-color: #4E6D51;
+  box-shadow: 0 4px 10px -3px rgba(78, 109, 81, 0.35);
 }
 
-/* Primary Warm Terracotta Pill Button */
-.btn-terracotta {
-  background-color: #A94B2F;
+/* Primary Royal Cobalt Blue Pill Button */
+.btn-cobalt {
+  background-color: #1250D2;
   color: #FFFFFF;
-  border: 1px solid #963E24;
-  transition: background-color 0.15s ease;
+  border: 1px solid #0E42B0;
+  box-shadow: 0 6px 16px -6px rgba(18, 80, 210, 0.44);
+  transition: transform 0.18s cubic-bezier(0.16, 1, 0.3, 1),
+    background-color 0.18s ease,
+    box-shadow 0.18s ease;
 }
 
-.btn-terracotta:hover {
-  background-color: #963E24;
+.btn-cobalt:hover {
+  transform: translateY(-2px);
+  background-color: #0D3FA8;
+  box-shadow: 0 10px 22px -6px rgba(18, 80, 210, 0.52);
 }
 
-/* Secondary Cream & Sage-Border Pill Button */
+.btn-cobalt:active {
+  transform: translateY(0);
+}
+
+/* Secondary Glass-Cream Pill Button */
 .btn-cream {
-  background-color: #FFFDF9;
+  background: rgba(255, 254, 250, 0.78);
   color: #262A24;
   border: 1px solid rgba(78, 109, 81, 0.28);
-  transition: background-color 0.15s ease, border-color 0.15s ease;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.9);
+  transition: transform 0.18s cubic-bezier(0.16, 1, 0.3, 1),
+    background-color 0.18s ease,
+    border-color 0.18s ease;
 }
 
 .btn-cream:hover {
-  background-color: #EEF2EC;
+  transform: translateY(-2px);
+  background: rgba(238, 242, 236, 0.9);
   border-color: rgba(78, 109, 81, 0.5);
+}
+
+.btn-cream:active {
+  transform: translateY(0);
 }
 
 /* Cream Input Field */
 .studio-input {
-  background-color: #FFFDF9;
+  background-color: rgba(255, 254, 250, 0.88);
   border: 1px solid rgba(38, 42, 36, 0.16);
   color: #262A24;
-  transition: border-color 0.15s ease;
+  transition: border-color 0.15s ease, background-color 0.15s ease;
 }
 
 .studio-input::placeholder {
@@ -139,5 +200,6 @@
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
+    transform: none !important;
   }
 }

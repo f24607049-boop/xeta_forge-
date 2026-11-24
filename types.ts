@@ -5,7 +5,13 @@
 
 export type PageId = 'home' | 'services' | 'process' | 'about' | 'contact';
 
-export type ServiceVisualId = 'web' | 'automation' | 'chatbot' | 'mobile' | 'training';
+export type ServiceVisualId =
+  | 'data'
+  | 'web'
+  | 'automation'
+  | 'chatbot'
+  | 'mobile'
+  | 'training';
 
 export interface Service {
   id: string;
